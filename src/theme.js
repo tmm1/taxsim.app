@@ -13,19 +13,16 @@ const textClassification = {
 }
 
 const boxClassification = {
-  fieldset: 'max-w-md border border-gray-400 rounded-md px-2 pb-1',
+  fieldset: 'max-w-md border border-gray-400 rounded-md px-3 pt-1 pb-1',
   legend: 'font-bold text-sm',
   wrapper: 'flex items-center mb-1 cursor-pointer',
   help: 'mb-2',
   input: `
     form-check-input
-    appearance-none
     h-5 w-5 mr-2
-    border border-gray-500 rounded-sm bg-white
-    checked:bg-blue-500 focus:outline-none focus:ring-0
     transition duration-200
   `,
-  label: 'text-sm text-gray-700 mt-1',
+  label: 'text-sm text-gray-700 mb-1',
 }
 
 const buttonClassification = {
