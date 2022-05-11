@@ -1,12 +1,16 @@
 <script setup>
 import {ref, reactive} from 'vue'
 
-const data = reactive({})
+const data = reactive({
+  year: 2020,
+  mstat: 'married',
+  depx: 2,
+})
 const output = ref(null)
 const schema = [
   {
     $formkit: 'number',
-    'outer-class': 'w-full col-span-1 md:col-span-2',
+    'outer-class': 'w-full col-span-1',
     name: 'year',
     id: 'year',
     label: 'Tax Year',
@@ -21,7 +25,7 @@ const schema = [
     label: 'State',
     help: 'State tax calculations are available from 1977 onwards',
     value: 0,
-    'outer-class': 'w-full col-span-1 md:col-span-2',
+    'outer-class': 'w-full col-span-1 md:col-span-3',
     options: {
       0: '',
       1: 'Alabama',
@@ -115,11 +119,70 @@ const schema = [
   {
     $formkit: 'number',
     name: 'depx',
-    label: 'Number of Dependents',
+    id: 'depx',
+    label: '# of Dependents',
     value: '0',
     min: 0,
     if: '$get(mstat).value == "headOfHousehold" || $get(mstat).value == "married" || $get(mstat).value == "marriedFilingSeparately"',
-    help: 'For personal exemption calculation',
+    help: 'Affects personal exemption calculation',
+  },
+  {
+    $el: 'div',
+    children: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'mb-1 font-bold text-sm',
+        },
+        children: 'Age of Dependents',
+        if: '$get(depx).value * 1 > 0',
+      },
+      {
+        $el: 'div',
+        attrs: {
+          class: 'text-xs text-gray-500 -mt-1 mb-2',
+        },
+        if: '$get(depx).value * 1 > 0',
+        children: 'Affects EITC, CTC and CCC.',
+      },
+      {
+        $formkit: 'number',
+        name: 'age1',
+        value: '1',
+        min: 1,
+        if: '$get(depx).value * 1 > 0',
+      },
+      {
+        $formkit: 'number',
+        name: 'age2',
+        value: '1',
+        'outer-class': '-mt-3',
+        min: 1,
+        if: '$get(depx).value * 1 > 1',
+      },
+      {
+        $formkit: 'number',
+        name: 'age3',
+        value: '1',
+        min: 1,
+        'outer-class': '-mt-3',
+        if: '$get(depx).value * 1 > 2',
+      },
+      {
+        $el: 'div',
+        attrs: {
+          class: 'text-xs text-gray-500 -mt-4',
+        },
+        if: '$get(depx).value * 1 > 0',
+        children: [
+          'Enter youngest dependents first. Enter 1 for infants.',
+          {
+            if: '$get(year).value * 1 >= 1991',
+            then: ' Enter 19 for students aged 20-23 to correct EITC calculation.',
+          },
+        ],
+      },
+    ],
   },
 ]
 
@@ -178,5 +241,11 @@ pre.data {
   @apply font-mono mx-10 my-4;
   font-size: 10pt;
   overflow-x: auto;
+}
+input[type='number'] {
+  text-align: right;
+}
+input#year {
+  @apply text-center;
 }
 </style>

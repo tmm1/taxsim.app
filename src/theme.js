@@ -1,7 +1,6 @@
 const textClassification = {
   label: 'block mb-1 font-bold text-sm formkit-invalid:text-red-500',
   inner: `
-      max-w-md
       border
       border-gray-400
       formkit-invalid:border-red-500
