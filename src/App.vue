@@ -3,7 +3,7 @@ import {ref, reactive} from 'vue'
 
 const schema = [
   {
-    $formkit: 'number',
+    $formkit: 'numeric',
     'outer-class': 'w-full col-span-1',
     name: 'year',
     id: 'year',
@@ -94,14 +94,14 @@ const schema = [
     $el: 'div',
     children: [
       {
-        $formkit: 'number',
+        $formkit: 'numeric',
         name: 'page',
         label: 'Age',
         min: 0,
         help: '$: "Age of taxpayer as of 12/31/" + $get(year).value',
       },
       {
-        $formkit: 'number',
+        $formkit: 'numeric',
         name: 'sage',
         label: 'Spouse Age',
         min: 0,
@@ -111,7 +111,7 @@ const schema = [
     ],
   },
   {
-    $formkit: 'number',
+    $formkit: 'numeric',
     name: 'depx',
     id: 'depx',
     label: '# of Dependents',
@@ -140,14 +140,14 @@ const schema = [
         children: 'Affects EITC, CTC and CCC.',
       },
       {
-        $formkit: 'number',
+        $formkit: 'numeric',
         name: 'age1',
         value: '1',
         min: 1,
         if: '$get(depx).value * 1 > 0',
       },
       {
-        $formkit: 'number',
+        $formkit: 'numeric',
         name: 'age2',
         value: '1',
         'outer-class': '-mt-3',
@@ -155,7 +155,7 @@ const schema = [
         if: '$get(depx).value * 1 > 1',
       },
       {
-        $formkit: 'number',
+        $formkit: 'numeric',
         name: 'age3',
         value: '1',
         min: 1,
@@ -271,9 +271,17 @@ async function recompute(input) {
   let res = await taxsim({
     ...input,
     mstat: filingStatus(input.mstat),
-    idtl: 5,
+    idtl: 2,
+    //idtl: 5,
   })
-  output.value = res
+  let lines = res.split('\r\n')
+  let keys = lines[0].split(',')
+  let vals = lines[1].split(',')
+  let out = {}
+  for (let [i, val] of vals.entries()) {
+    out[keys[i]] = val
+  }
+  output.value = out
 }
 </script>
 
@@ -297,10 +305,42 @@ pre.data {
   font-size: 10pt;
   overflow-x: auto;
 }
-input[type='number'] {
-  text-align: right;
-}
-input#year {
-  @apply text-center;
+.input-numeric {
+  display: flex;
+  flex-grow: 1;
+  input {
+    text-align: center;
+    -moz-appearance: textfield;
+    margin-top: 0.25em;
+  }
+  input::-webkit-inner-spin-button,
+  input::-webkit-outer-spin-button {
+    appearance: none;
+  }
+  .formkit-suffix,
+  .formkit-prefix {
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+    margin: 0.5em;
+    background: #eee;
+    border: 1px solid var(--fk-color-border);
+    border-radius: 50%;
+  }
+  .formkit-prefix span,
+  .formkit-suffix span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .formkit-prefix:hover,
+  .formkit-suffix:hover {
+    @apply text-blue-700;
+  }
 }
 </style>

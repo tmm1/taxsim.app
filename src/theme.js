@@ -57,6 +57,7 @@ export default {
   },
   month: textClassification,
   number: textClassification,
+  numeric: textClassification,
   password: textClassification,
   radio: {
     ...boxClassification,
@@ -69,7 +70,10 @@ export default {
       'form-range appearance-none w-full h-2 p-0 bg-gray-300 rounded-full focus:outline-none focus:ring-0 focus:shadow-none',
   },
   search: textClassification,
-  select: textClassification,
+  select: {
+    ...textClassification,
+    input: 'w-full h-10 px-3 border-none text-base bg-white',
+  },
   submit: buttonClassification,
   tel: textClassification,
   text: textClassification,
