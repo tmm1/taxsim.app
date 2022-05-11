@@ -1,7 +1,7 @@
 <script setup>
 import {ref, reactive} from 'vue'
 
-const schema = [
+const schemaLaws = [
   {
     $formkit: 'numeric',
     'outer-class': 'w-full col-span-1',
@@ -75,6 +75,9 @@ const schema = [
       51: 'Wyoming',
     },
   },
+]
+
+const schemaDemographics = [
   {
     $formkit: 'radio',
     name: 'mstat',
@@ -178,70 +181,66 @@ const schema = [
       },
     ],
   },
-  {
-    $formkit: 'amount',
-    'outer-class': 'col-span-2 md:col-span-4',
-    min: 0,
-    max: 500000,
-    step: 500,
-    delay: 0,
-    value: 0,
-    label: '$: "Wages and Salaries: " + $nformat($get(pwages).value)',
-    name: 'pwages',
-    id: 'pwages',
-  },
-  {
-    $formkit: 'amount',
-    'outer-class': 'col-span-2 md:col-span-4',
-    min: 0,
-    max: 500000,
-    step: 500,
-    delay: 0,
-    value: 0,
-    label: '',
-    label: '$: "Self-employment Income: " + $nformat($get(psemp).value)',
-    name: 'psemp',
-    id: 'psemp',
-  },
-  {
-    $formkit: 'amount',
-    'outer-class': 'col-span-2 md:col-span-4',
-    min: -500000,
-    max: 500000,
-    step: 500,
-    delay: 0,
-    value: 0,
-    label: '$: "Short-term Capital Gain or Loss: " + $nformat($get(stcg).value)',
-    name: 'stcg',
-    id: 'stcg',
-  },
-  {
-    $formkit: 'amount',
-    'outer-class': 'col-span-2 md:col-span-4',
-    min: -500000,
-    max: 500000,
-    step: 500,
-    delay: 0,
-    value: 0,
-    label: '$: "Long-term Capital Gain or Loss: " + $nformat($get(ltcg).value)',
-    name: 'ltcg',
-    id: 'ltcg',
-  },
 ]
 
-const nformat = Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 0,
-}).format
+const incomeVars = [
+  {
+    name: 'pwages',
+    spouse: 'swages',
+    label: 'Wages and Salaries',
+  },
+  {
+    name: 'psemp',
+    spouse: 'ssemp',
+    label: 'Self-employment Income',
+  },
+  {
+    name: 'stcg',
+    label: 'Short-term Capital Gain or Loss',
+  },
+  {
+    name: 'ltcg',
+    label: 'Long-term Capital Gain or Loss',
+  },
+]
+const MAX = 500 * 1000
+const STEP = 500
+const schemaIncome = incomeVars.map(item => ({
+  $formkit: 'amount',
+  id: item.name,
+  name: item.name,
+  label: item.label,
+  'outer-class': 'col-span-2 md:col-span-4',
+  min: item.type == 'gainorloss' ? -MAX : 0,
+  max: MAX,
+  step: STEP,
+  delay: 0,
+  value: 0,
+  sectionsSchema: {
+    label: {
+      children: [
+        '$label',
+        {
+          $cmp: 'amount',
+          props: {
+            value: '$value',
+            class: 'float-right',
+          },
+        },
+      ],
+    },
+  },
+}))
+
 const data = reactive({
   year: 2020,
   mstat: 'married',
   depx: 2,
 })
 const output = ref(null)
+
+const schema = schemaLaws.concat(schemaDemographics).concat(schemaIncome)
 const schemaData = reactive({
-  nformat,
   filingStatusInfo: () => {
     switch (data.mstat) {
       case 'dependentTaxpayer':
