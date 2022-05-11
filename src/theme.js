@@ -69,6 +69,12 @@ export default {
     input:
       'form-range appearance-none w-full h-2 p-0 bg-gray-300 rounded-full focus:outline-none focus:ring-0 focus:shadow-none',
   },
+  amount: {
+    ...textClassification,
+    inner: '',
+    input:
+      'form-range appearance-none w-full h-2 p-0 bg-gray-300 rounded-full focus:outline-none focus:ring-0 focus:shadow-none',
+  },
   search: textClassification,
   select: {
     ...textClassification,

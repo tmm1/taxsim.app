@@ -179,7 +179,7 @@ const schema = [
     ],
   },
   {
-    $formkit: 'range',
+    $formkit: 'amount',
     'outer-class': 'col-span-2 md:col-span-4',
     min: 0,
     max: 500000,
@@ -191,7 +191,7 @@ const schema = [
     id: 'pwages',
   },
   {
-    $formkit: 'range',
+    $formkit: 'amount',
     'outer-class': 'col-span-2 md:col-span-4',
     min: 0,
     max: 500000,
@@ -204,7 +204,7 @@ const schema = [
     id: 'psemp',
   },
   {
-    $formkit: 'range',
+    $formkit: 'amount',
     'outer-class': 'col-span-2 md:col-span-4',
     min: -500000,
     max: 500000,
@@ -216,7 +216,7 @@ const schema = [
     id: 'stcg',
   },
   {
-    $formkit: 'range',
+    $formkit: 'amount',
     'outer-class': 'col-span-2 md:col-span-4',
     min: -500000,
     max: 500000,
@@ -305,13 +305,14 @@ pre.data {
   font-size: 10pt;
   overflow-x: auto;
 }
-.input-numeric {
+.input-numeric,
+.input-amount {
   display: flex;
   flex-grow: 1;
+  align-items: center;
   input {
     text-align: center;
     -moz-appearance: textfield;
-    margin-top: 0.25em;
   }
   input::-webkit-inner-spin-button,
   input::-webkit-outer-spin-button {

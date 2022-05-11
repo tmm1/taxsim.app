@@ -4,6 +4,7 @@ import {plugin, defaultConfig} from '@formkit/vue'
 import {generateClasses} from '@formkit/themes'
 import theme from './theme.js'
 import numeric from './numeric.js'
+import amount from './amount.js'
 import './index.css'
 
 createApp(App)
@@ -12,6 +13,7 @@ createApp(App)
     defaultConfig({
       inputs: {
         numeric,
+        amount,
       },
       config: {
         classes: generateClasses(theme),
