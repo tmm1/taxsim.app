@@ -1,12 +1,6 @@
 <script setup>
 import {ref, reactive} from 'vue'
 
-const data = reactive({
-  year: 2020,
-  mstat: 'married',
-  depx: 2,
-})
-const output = ref(null)
 const schema = [
   {
     $formkit: 'number',
@@ -184,9 +178,70 @@ const schema = [
       },
     ],
   },
+  {
+    $formkit: 'range',
+    'outer-class': 'col-span-2 md:col-span-4',
+    min: 0,
+    max: 500000,
+    step: 500,
+    delay: 0,
+    value: 0,
+    label: '$: "Wages and Salaries: " + $nformat($get(pwages).value)',
+    name: 'pwages',
+    id: 'pwages',
+  },
+  {
+    $formkit: 'range',
+    'outer-class': 'col-span-2 md:col-span-4',
+    min: 0,
+    max: 500000,
+    step: 500,
+    delay: 0,
+    value: 0,
+    label: '',
+    label: '$: "Self-employment Income: " + $nformat($get(psemp).value)',
+    name: 'psemp',
+    id: 'psemp',
+  },
+  {
+    $formkit: 'range',
+    'outer-class': 'col-span-2 md:col-span-4',
+    min: -500000,
+    max: 500000,
+    step: 500,
+    delay: 0,
+    value: 0,
+    label: '$: "Short-term Capital Gain or Loss: " + $nformat($get(stcg).value)',
+    name: 'stcg',
+    id: 'stcg',
+  },
+  {
+    $formkit: 'range',
+    'outer-class': 'col-span-2 md:col-span-4',
+    min: -500000,
+    max: 500000,
+    step: 500,
+    delay: 0,
+    value: 0,
+    label: '$: "Long-term Capital Gain or Loss: " + $nformat($get(ltcg).value)',
+    name: 'ltcg',
+    id: 'ltcg',
+  },
 ]
 
+const nformat = Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+}).format
+const data = reactive({
+  year: 2020,
+  mstat: 'married',
+  depx: 2,
+})
+const output = ref(null)
 const schemaData = reactive({
+  nformat,
   filingStatusInfo: () => {
     switch (data.mstat) {
       case 'dependentTaxpayer':
