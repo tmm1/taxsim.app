@@ -197,6 +197,7 @@ const incomeVars = [
   {
     name: 'intrec',
     label: 'Taxable Interest Received',
+    max: 50000,
   },
   {
     name: 'stcg',
@@ -231,7 +232,7 @@ const schemaIncome = incomeVars.map(item => ({
   label: item.label,
   'outer-class': 'col-span-2 md:col-span-4',
   min: item.type == 'gainorloss' ? -MAX : 0,
-  max: MAX,
+  max: item.max || MAX,
   step: STEP,
   delay: 0,
   value: 0,
@@ -289,9 +290,11 @@ async function recompute(input) {
   let res = await taxsim({
     ...input,
     mstat: filingStatus(input.mstat),
-    // idtl: 2,
-    //idtl: 5,
+    idtl: 2,
+    // idtl: 5,
   })
+  // output.value = res
+  // return
   let lines = res.split('\r\n')
   let keys = lines[0].split(',')
   let vals = lines[1].split(',')
@@ -305,19 +308,31 @@ async function recompute(input) {
 
 <template>
   <div class="flex flex-col md:flex-row mx-auto">
-    <main class="min-h-screen p-4 max-w-4xl">
+    <main class="min-h-screen p-4 max-w-2xl">
       <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
         <FormKit type="group" v-model="data" @load="recompute" @input="recompute">
           <FormKitSchema :schema="schema" :data="schemaData" />
         </FormKit>
       </div>
     </main>
-    <aside class="flex flex-col p-4 md:flex-none md:bg-white md:drop-shadow">
-      <h2>Input</h2>
-      <pre class="data">{{ data }}</pre>
+    <aside
+      class="flex flex-col mb-auto min-h-screen w-screen md:w-1/4 p-4 md:bg-white md:drop-shadow md:sticky md:top-0"
+    >
+      <div v-if="output">
+        <div>
+          Tax Year <span class="float-right">{{ output.year }}</span>
+        </div>
+        <div>AGI <amount class="float-right" :value="output.v10" /></div>
+        <div v-if="output.fiitax >= 0">Tax <amount class="float-right" :value="output.fiitax" /></div>
+        <div v-else>Tax Refund <amount class="float-right" :value="output.fiitax * -1" /></div>
+      </div>
+      <div v-if="false">
+        <h2>Input</h2>
+        <pre class="data">{{ data }}</pre>
 
-      <h2>Output</h2>
-      <pre class="data">{{ output }}</pre>
+        <h2>Output</h2>
+        <pre class="data">{{ output }}</pre>
+      </div>
     </aside>
   </div>
 </template>
