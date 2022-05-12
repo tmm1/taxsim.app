@@ -290,12 +290,12 @@ function filingStatus(input) {
 
 async function recompute(input) {
   var url = new URL(window.location)
-  for (let k in url.searchParams.entries()) {
-    url.searchParams.delete(k)
-  }
   for (let k in data) {
     let v = data[k]
-    if (v === undefined || v == 0) continue
+    if (v === undefined || v == 0 || v == '0') {
+      url.searchParams.delete(k)
+      continue
+    }
     url.searchParams.set(k, v)
   }
   window.history.replaceState('', '', url)
