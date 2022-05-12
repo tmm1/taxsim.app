@@ -2,7 +2,7 @@
 import {ref, reactive, toRaw} from 'vue'
 
 const url = new URL(window.location)
-const params = url.searchParams || {get: ()=>null}
+const params = url.searchParams || {get: () => null}
 const schemaLaws = [
   {
     $formkit: 'numeric',
@@ -103,7 +103,7 @@ const schemaDemographics = [
         name: 'page',
         label: 'Age',
         min: 0,
-        placeholder: "0",
+        placeholder: '0',
         value: params.get('page'),
         help: '$: "Age of taxpayer as of 12/31/" + $get(year).value',
       },
@@ -112,7 +112,7 @@ const schemaDemographics = [
         name: 'sage',
         label: 'Spouse Age',
         min: 0,
-        placeholder: "0",
+        placeholder: '0',
         value: params.get('sage'),
         if: '$get(mstat).value == "married" || $get(mstat).value == "marriedFilingSeparately"',
         help: '$: "Age of spouse as of 12/31/" + $get(year).value',
