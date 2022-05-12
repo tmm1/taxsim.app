@@ -63,6 +63,7 @@ export default createInput(
 function addHandlers(node) {
   node.on('created', () => {
     node.context.handlers.increment = e => {
+      e.preventDefault()
       if (node.context.disabled) return
       const value = parseInt(node.value) || 0
       const input = e.currentTarget.parentElement.querySelector('input')
@@ -74,6 +75,7 @@ function addHandlers(node) {
       }
     }
     node.context.handlers.decrement = e => {
+      e.preventDefault()
       if (node.context.disabled) return
       const value = parseInt(node.value) || 0
       const input = e.currentTarget.parentElement.querySelector('input')
