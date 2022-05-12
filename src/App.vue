@@ -342,10 +342,10 @@ pre.data {
     cursor: pointer;
     user-select: none;
     position: relative;
-    width: 2em;
-    height: 2em;
+    width: 1.75em;
+    height: 1.75em;
     text-align: center;
-    margin: 0.5em;
+    margin: 0.35em;
     background: #eee;
     border: 1px solid var(--fk-color-border);
     border-radius: 50%;
