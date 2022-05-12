@@ -1,14 +1,16 @@
 <script setup>
-import {ref, reactive} from 'vue'
+import {ref, reactive, toRaw} from 'vue'
 
+const url = new URL(window.location)
+const params = url.searchParams || {get: ()=>null}
 const schemaLaws = [
   {
     $formkit: 'numeric',
-    'outer-class': 'w-full col-span-1',
+    'outer-class': 'col-span-1',
     name: 'year',
     id: 'year',
     label: 'Tax Year',
-    value: '2020',
+    value: params.get('year') || '2020',
     min: 1960,
     max: new Date().getFullYear() + 1,
     help: 'Federal tax calculations are available from 1960 onwards',
@@ -18,7 +20,7 @@ const schemaLaws = [
     name: 'state',
     label: 'State',
     help: 'State tax calculations are available from 1977 onwards',
-    value: 0,
+    value: params.get('state') || 0,
     'outer-class': 'w-full col-span-1 md:col-span-3',
     options: {
       0: '',
@@ -83,15 +85,15 @@ const schemaDemographics = [
     name: 'mstat',
     id: 'mstat',
     label: 'Filing Status',
-    'outer-class': 'col-span-1',
+    'outer-class': 'col-start-1 col-span-1',
     options: {
       single: 'Single',
       married: 'Married',
       marriedFilingSeparately: 'Married Filing Separately',
       headOfHousehold: 'Head of Household',
-      dependentTaxpayer: 'Dependent Taxpayer',
+      dependent: 'Dependent Taxpayer',
     },
-    value: 'single',
+    value: params.get('mstat') || 'single',
   },
   {
     $el: 'div',
@@ -101,6 +103,7 @@ const schemaDemographics = [
         name: 'page',
         label: 'Age',
         min: 0,
+        value: params.get('page'),
         help: '$: "Age of taxpayer as of 12/31/" + $get(year).value',
       },
       {
@@ -108,6 +111,7 @@ const schemaDemographics = [
         name: 'sage',
         label: 'Spouse Age',
         min: 0,
+        value: params.get('sage'),
         if: '$get(mstat).value == "married" || $get(mstat).value == "marriedFilingSeparately"',
         help: '$: "Age of spouse as of 12/31/" + $get(year).value',
       },
@@ -118,7 +122,7 @@ const schemaDemographics = [
     name: 'depx',
     id: 'depx',
     label: '# of Dependents',
-    value: '0',
+    value: params.get('depx') || '0',
     min: 0,
     if: '$get(mstat).value == "headOfHousehold" || $get(mstat).value == "married" || $get(mstat).value == "marriedFilingSeparately"',
     help: 'Affects personal exemption calculation',
@@ -145,14 +149,14 @@ const schemaDemographics = [
       {
         $formkit: 'numeric',
         name: 'age1',
-        value: '1',
+        value: params.get('age1') || '1',
         min: 1,
         if: '$get(depx).value * 1 > 0',
       },
       {
         $formkit: 'numeric',
         name: 'age2',
-        value: '1',
+        value: params.get('age2') || '1',
         'outer-class': '-mt-3',
         min: 1,
         if: '$get(depx).value * 1 > 1',
@@ -160,7 +164,7 @@ const schemaDemographics = [
       {
         $formkit: 'numeric',
         name: 'age3',
-        value: '1',
+        value: params.get('age3') || '1',
         min: 1,
         'outer-class': '-mt-3',
         if: '$get(depx).value * 1 > 2',
@@ -235,7 +239,7 @@ const schemaIncome = incomeVars.map(item => ({
   max: item.max || MAX,
   step: STEP,
   delay: 0,
-  value: 0,
+  value: params.get(item.name) || 0,
   sectionsSchema: {
     label: {
       children: [
@@ -252,18 +256,14 @@ const schemaIncome = incomeVars.map(item => ({
   },
 }))
 
-const data = reactive({
-  year: 2020,
-  mstat: 'married',
-  depx: 2,
-})
+const data = reactive({})
 const output = ref(null)
 
 const schema = schemaLaws.concat(schemaDemographics).concat(schemaIncome)
 const schemaData = reactive({
   filingStatusInfo: () => {
     switch (data.mstat) {
-      case 'dependentTaxpayer':
+      case 'dependent':
         return 'Typically a child with income'
       default:
         return ''
@@ -281,12 +281,23 @@ function filingStatus(input) {
       return '2'
     case 'marriedFilingSeparately':
       return '6'
-    case 'dependentTaxpayer':
+    case 'dependent':
       return '8'
   }
 }
 
 async function recompute(input) {
+  var url = new URL(window.location)
+  for (let k in url.searchParams.entries()) {
+    url.searchParams.delete(k)
+  }
+  for (let k in data) {
+    let v = data[k]
+    if (v === undefined || v == 0) continue
+    url.searchParams.set(k, v)
+  }
+  window.history.replaceState('', '', url)
+
   let res = await taxsim({
     ...input,
     mstat: filingStatus(input.mstat),
