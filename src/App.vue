@@ -195,12 +195,31 @@ const incomeVars = [
     label: 'Self-employment Income',
   },
   {
+    name: 'intrec',
+    label: 'Taxable Interest Received',
+  },
+  {
     name: 'stcg',
     label: 'Short-term Capital Gain or Loss',
+    type: 'gainorloss',
   },
   {
     name: 'ltcg',
     label: 'Long-term Capital Gain or Loss',
+    type: 'gainorloss',
+  },
+  {
+    name: 'pui',
+    spouse: 'ui',
+    label: 'Unemployment Compensation Received',
+  },
+  {
+    name: 'pensions',
+    label: 'Taxable Pensions and IRA distributions',
+  },
+  {
+    name: 'gssi',
+    label: 'Gross Social Security Benefits',
   },
 ]
 const MAX = 500 * 1000
