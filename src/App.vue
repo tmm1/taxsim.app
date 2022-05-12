@@ -168,7 +168,7 @@ const schemaDemographics = [
       {
         $el: 'div',
         attrs: {
-          class: 'text-xs text-gray-500 -mt-4',
+          class: 'text-xs text-gray-500 -mt-4 mb-4',
         },
         if: '$get(depx).value * 1 > 0',
         children: [
@@ -289,7 +289,7 @@ async function recompute(input) {
   let res = await taxsim({
     ...input,
     mstat: filingStatus(input.mstat),
-    idtl: 2,
+    // idtl: 2,
     //idtl: 5,
   })
   let lines = res.split('\r\n')
@@ -304,17 +304,22 @@ async function recompute(input) {
 </script>
 
 <template>
-  <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
-    <FormKit type="group" v-model="data" @load="recompute" @input="recompute">
-      <FormKitSchema :schema="schema" :data="schemaData" />
-    </FormKit>
+  <div class="flex flex-col md:flex-row mx-auto">
+    <main class="min-h-screen p-4 max-w-4xl">
+      <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
+        <FormKit type="group" v-model="data" @load="recompute" @input="recompute">
+          <FormKitSchema :schema="schema" :data="schemaData" />
+        </FormKit>
+      </div>
+    </main>
+    <aside class="flex flex-col p-4 md:flex-none md:bg-white md:drop-shadow">
+      <h2>Input</h2>
+      <pre class="data">{{ data }}</pre>
+
+      <h2>Output</h2>
+      <pre class="data">{{ output }}</pre>
+    </aside>
   </div>
-
-  <h2>Input</h2>
-  <pre class="data">{{ data }}</pre>
-
-  <h2>Output</h2>
-  <pre class="data">{{ output }}</pre>
 </template>
 
 <style lang="postcss">
