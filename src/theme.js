@@ -2,7 +2,7 @@ const textClassification = {
   label: 'block mb-1 font-bold text-sm formkit-invalid:text-red-500',
   inner: `
       border
-      border-gray-400
+      border-gray-200
       formkit-invalid:border-red-500
       rounded-lg mb-1
       overflow-hidden
@@ -12,7 +12,7 @@ const textClassification = {
 }
 
 const boxClassification = {
-  fieldset: 'max-w-md border border-gray-400 rounded-md px-3 pt-1 pb-1',
+  fieldset: 'max-w-md border border-gray-200 rounded-md px-3 pt-1 pb-1',
   legend: 'font-bold text-sm',
   wrapper: 'flex items-center mb-1 cursor-pointer',
   help: 'mb-2',
@@ -40,7 +40,7 @@ export default {
   button: buttonClassification,
   color: {
     label: 'block mb-1 font-bold text-sm',
-    input: 'w-16 h-8 appearance-none cursor-pointer border border-gray-300 rounded-md mb-2 p-1',
+    input: 'w-16 h-8 appearance-none cursor-pointer border border-gray-200 rounded-md mb-2 p-1',
   },
   date: textClassification,
   'datetime-local': textClassification,
@@ -74,7 +74,7 @@ export default {
     inner: '',
     input:
       'form-range appearance-none w-full h-2 p-0 bg-gray-300 rounded-full focus:outline-none focus:ring-0 focus:shadow-none',
-    wrapper: 'border border-gray-400 rounded-lg p-1',
+    wrapper: 'border border-gray-200 rounded-lg p-1',
     label: 'block mb-1 font-bold text-sm formkit-invalid:text-red-500 px-3 pt-1',
   },
   search: textClassification,
