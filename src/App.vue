@@ -273,80 +273,84 @@ const creditsVars = [
 ]
 const creditOuts = [
   {
-    name: "v45",
-    label: "CARES Recovery Rebate",
+    name: 'v45',
+    label: 'CARES Recovery Rebate',
   },
   {
-    name: "v21",
-    label: "General Tax Credit",
+    name: 'v21',
+    label: 'General Tax Credit',
   },
   {
-    name: "v22",
-    label: "Child Tax Credit",
+    name: 'v22',
+    label: 'Child Tax Credit',
   },
   {
-    name: "v23",
-    label: "Additional CTC",
+    name: 'v23',
+    label: 'Additional CTC',
   },
   {
-    name: "v24",
-    label: "Child Care Credit",
+    name: 'v24',
+    label: 'Child Care Credit',
   },
   {
-    name: "v25",
-    label: "Earned Income Credit",
+    name: 'v25',
+    label: 'Earned Income Credit',
   },
   {
-    name: "v14",
-    label: "Personal Exemptions",
+    name: 'v14',
+    label: 'Personal Exemptions',
   },
   {
-    name: "v13",
-    label: "Standard Deduction",
+    name: 'v13',
+    label: 'Standard Deduction',
   },
 ]
-const schemaCredits = creditOuts.map(o => ({
-    $el: "div",
+const schemaCredits = creditOuts
+  .map(o => ({
+    $el: 'div',
     if: `$output.${o.name} * 1 > 0`,
     attrs: {
-      class: "col-span-2 font-bold text-sm rounded-md p-4 border border-gray-200 mb-4"
+      class: 'col-span-2 font-bold text-sm rounded-md p-4 border border-gray-200 mb-4',
     },
     children: [
       o.label,
       {
-        $cmp: "amount",
+        $cmp: 'amount',
         props: {
-          class: "float-right"
+          class: 'float-right',
         },
-        children: `$output.${o.name}`
-      }
-    ]
-})).concat(creditsVars.map(item => ({
-  $formkit: 'amount',
-  id: item.name,
-  name: item.name,
-  label: item.label,
-  help: item.help,
-  outerClass: 'col-span-2',
-  max: item.max || MAX,
-  step: STEP,
-  delay: 0,
-  value: params.get(item.name) || 0,
-  sectionsSchema: {
-    label: {
-      children: [
-        '$label',
-        {
-          $cmp: 'amount',
-          props: {
-            class: 'float-right',
-          },
-          children: '$value',
+        children: `$output.${o.name}`,
+      },
+    ],
+  }))
+  .concat(
+    creditsVars.map(item => ({
+      $formkit: 'amount',
+      id: item.name,
+      name: item.name,
+      label: item.label,
+      help: item.help,
+      outerClass: 'col-span-2',
+      max: item.max || MAX,
+      step: STEP,
+      delay: 0,
+      value: params.get(item.name) || 0,
+      sectionsSchema: {
+        label: {
+          children: [
+            '$label',
+            {
+              $cmp: 'amount',
+              props: {
+                class: 'float-right',
+              },
+              children: '$value',
+            },
+          ],
         },
-      ],
-    },
-  },
-})))
+      },
+    }))
+  )
 
 const output = ref(null)
 const data = reactive({})
@@ -417,8 +421,10 @@ async function recompute(input) {
           <p class="text-xl md:text-2xl text-gray-600 font-bold"><a href="/">taxsim.app</a></p>
           <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight">
             an interactive US Individual Income Tax simulator.
-            <br/>
-            calcuations occur in your browser using a <a class="decoration-slate-300 underline" href="https://github.com/tmm1/taxsim.js">WASM build</a> of <a class="decoration-slate-300 underline" href="https://taxsim.nber.org">NBER TAXSIM</a>.
+            <br />
+            calcuations occur in your browser using a
+            <a class="decoration-slate-300 underline" href="https://github.com/tmm1/taxsim.js">WASM build</a> of
+            <a class="decoration-slate-300 underline" href="https://taxsim.nber.org">NBER TAXSIM</a>.
           </p>
           <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4 pt-1">
             <FormKitSchema :schema="schemaLaws" :data="schemaData" />
@@ -437,30 +443,30 @@ async function recompute(input) {
           <FormKitSchema :schema="schemaDemographics" :data="schemaData" />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
-        <div>
-          <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
-            <div class="absolute inset-0 flex items-center" aria-hidden="true">
-              <div class="w-full border-t border-gray-300" />
+          <div>
+            <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
+              <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                <div class="w-full border-t border-gray-300" />
+              </div>
+              <div class="relative flex justify-center">
+                <span class="px-3 bg-white text-lg font-medium text-gray-900"> Deductions &amp; Credits </span>
+              </div>
             </div>
-            <div class="relative flex justify-center">
-              <span class="px-3 bg-white text-lg font-medium text-gray-900"> Deductions &amp; Credits </span>
-            </div>
-          </div>
 
-          <FormKitSchema :schema="schemaCredits" :data="schemaData" />
-        </div>
-        <div>
-          <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
-            <div class="absolute inset-0 flex items-center" aria-hidden="true">
-              <div class="w-full border-t border-gray-300" />
-            </div>
-            <div class="relative flex justify-center">
-              <span class="px-3 bg-white text-lg font-medium text-gray-900"> Income </span>
-            </div>
+            <FormKitSchema :schema="schemaCredits" :data="schemaData" />
           </div>
+          <div>
+            <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
+              <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                <div class="w-full border-t border-gray-300" />
+              </div>
+              <div class="relative flex justify-center">
+                <span class="px-3 bg-white text-lg font-medium text-gray-900"> Income </span>
+              </div>
+            </div>
 
-          <FormKitSchema :schema="schemaIncome" :data="schemaData" />
-        </div>
+            <FormKitSchema :schema="schemaIncome" :data="schemaData" />
+          </div>
         </div>
       </main>
       <aside class="flex flex-col mb-auto min-h-screen w-screen md:w-1/4 p-4 hidden">
