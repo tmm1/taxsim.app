@@ -431,39 +431,18 @@ async function recompute(input) {
           </div>
         </div>
         <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
-          <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
-            <div class="absolute inset-0 flex items-center" aria-hidden="true">
-              <div class="w-full border-t border-gray-300" />
-            </div>
-            <div class="relative flex justify-center">
-              <span class="px-3 bg-white text-lg font-medium text-gray-900"> Demographics </span>
-            </div>
-          </div>
+          <heading class="col-start-0 col-span-2 md:col-span-4">Demographics</heading>
 
           <FormKitSchema :schema="schemaDemographics" :data="schemaData" />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
           <div>
-            <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
-              <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                <div class="w-full border-t border-gray-300" />
-              </div>
-              <div class="relative flex justify-center">
-                <span class="px-3 bg-white text-lg font-medium text-gray-900"> Deductions &amp; Credits </span>
-              </div>
-            </div>
+            <heading class="col-start-0 col-span-2 md:col-span-4">Deductions &amp; Credits</heading>
 
             <FormKitSchema :schema="schemaCredits" :data="schemaData" />
           </div>
           <div>
-            <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
-              <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                <div class="w-full border-t border-gray-300" />
-              </div>
-              <div class="relative flex justify-center">
-                <span class="px-3 bg-white text-lg font-medium text-gray-900"> Income </span>
-              </div>
-            </div>
+            <heading class="col-start-0 col-span-2 md:col-span-4">Income</heading>
 
             <FormKitSchema :schema="schemaIncome" :data="schemaData" />
           </div>
