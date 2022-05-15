@@ -13,10 +13,9 @@ const nformat = Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 }).format
 
-let amount = (props, context) => {
-  return h('span', props, nformat(props.value))
+let amount = (props, {slots}) => {
+  return h('span', props, nformat(slots.default()[0].children))
 }
-amount.props = ['value']
 
 createApp(App)
   .component('amount', amount)

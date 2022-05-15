@@ -6,10 +6,10 @@ const params = url.searchParams || {get: () => null}
 const schemaLaws = [
   {
     $formkit: 'numeric',
-    'outer-class': 'col-span-1',
+    outerClass: 'col-span-1 md:col-span-2',
+    inputClass: 'font-bold',
     name: 'year',
     id: 'year',
-    label: 'Tax Year',
     value: params.get('year') || '2020',
     min: 1960,
     max: new Date().getFullYear() + 1,
@@ -18,10 +18,9 @@ const schemaLaws = [
   {
     $formkit: 'select',
     name: 'state',
-    label: 'State',
     help: 'State tax calculations are available from 1977 onwards',
     value: params.get('state') || 0,
-    'outer-class': 'w-full col-span-1 md:col-span-3',
+    outerClass: 'w-full col-span-1 md:col-span-2 xsticky xtop-[2em] bg-white',
     options: {
       0: '',
       1: 'Alabama',
@@ -85,7 +84,7 @@ const schemaDemographics = [
     name: 'mstat',
     id: 'mstat',
     label: 'Filing Status',
-    'outer-class': 'col-start-1 col-span-1',
+    outerClass: 'col-start-1 col-span-1',
     options: {
       single: 'Single',
       married: 'Married',
@@ -128,7 +127,10 @@ const schemaDemographics = [
     placeholder: '0',
     min: 0,
     if: '$get(mstat).value == "headOfHousehold" || $get(mstat).value == "married" || $get(mstat).value == "marriedFilingSeparately"',
-    help: 'Affects personal exemption calculation',
+    help: {
+      if: '$get(year).value * 1 <= 2017',
+      then: 'Affects personal exemption calculation',
+    },
   },
   {
     $el: 'div',
@@ -160,7 +162,7 @@ const schemaDemographics = [
         $formkit: 'numeric',
         name: 'age2',
         value: params.get('age2') || '1',
-        'outer-class': '-mt-3',
+        outerClass: '-mt-3',
         min: 1,
         if: '$get(depx).value * 1 > 1',
       },
@@ -169,7 +171,7 @@ const schemaDemographics = [
         name: 'age3',
         value: params.get('age3') || '1',
         min: 1,
-        'outer-class': '-mt-3',
+        outerClass: '-mt-3',
         if: '$get(depx).value * 1 > 2',
       },
       {
@@ -237,7 +239,7 @@ const schemaIncome = incomeVars.map(item => ({
   id: item.name,
   name: item.name,
   label: item.label,
-  'outer-class': 'col-span-2 md:col-span-4',
+  outerClass: 'col-span-2',
   min: item.type == 'gainorloss' ? -MAX : 0,
   max: item.max || MAX,
   step: STEP,
@@ -250,20 +252,107 @@ const schemaIncome = incomeVars.map(item => ({
         {
           $cmp: 'amount',
           props: {
-            value: '$value',
             class: 'float-right',
           },
+          children: '$value',
         },
       ],
     },
   },
 }))
 
-const data = reactive({})
-const output = ref(null)
+const creditsVars = [
+  {
+    name: 'mortgage',
+    label: 'Itemized Deductions',
+  },
+  {
+    name: 'childcare',
+    label: 'Child Care Expenses',
+  },
+]
+const creditOuts = [
+  {
+    name: "v45",
+    label: "CARES Recovery Rebate",
+  },
+  {
+    name: "v21",
+    label: "General Tax Credit",
+  },
+  {
+    name: "v22",
+    label: "Child Tax Credit",
+  },
+  {
+    name: "v23",
+    label: "Additional CTC",
+  },
+  {
+    name: "v24",
+    label: "Child Care Credit",
+  },
+  {
+    name: "v25",
+    label: "Earned Income Credit",
+  },
+  {
+    name: "v14",
+    label: "Personal Exemptions",
+  },
+  {
+    name: "v13",
+    label: "Standard Deduction",
+  },
+]
+const schemaCredits = creditOuts.map(o => ({
+    $el: "div",
+    if: `$output.${o.name} * 1 > 0`,
+    attrs: {
+      class: "col-span-2 font-bold text-sm rounded-md p-4 border border-gray-200 mb-4"
+    },
+    children: [
+      o.label,
+      {
+        $cmp: "amount",
+        props: {
+          class: "float-right"
+        },
+        children: `$output.${o.name}`
+      }
+    ]
+})).concat(creditsVars.map(item => ({
+  $formkit: 'amount',
+  id: item.name,
+  name: item.name,
+  label: item.label,
+  help: item.help,
+  outerClass: 'col-span-2',
+  max: item.max || MAX,
+  step: STEP,
+  delay: 0,
+  value: params.get(item.name) || 0,
+  sectionsSchema: {
+    label: {
+      children: [
+        '$label',
+        {
+          $cmp: 'amount',
+          props: {
+            class: 'float-right',
+          },
+          children: '$value',
+        },
+      ],
+    },
+  },
+})))
 
-const schema = schemaLaws.concat(schemaDemographics).concat(schemaIncome)
+const output = ref(null)
+const data = reactive({})
+
 const schemaData = reactive({
+  output,
   filingStatusInfo: () => {
     switch (data.mstat) {
       case 'dependent':
@@ -321,34 +410,76 @@ async function recompute(input) {
 </script>
 
 <template>
-  <div class="flex flex-col md:flex-row mx-auto">
-    <main class="min-h-screen p-4 max-w-2xl">
-      <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
-        <FormKit type="group" v-model="data" @load="recompute" @input="recompute">
-          <FormKitSchema :schema="schema" :data="schemaData" />
-        </FormKit>
-      </div>
-    </main>
-    <aside
-      class="flex flex-col mb-auto min-h-screen w-screen md:w-1/4 p-4 md:bg-white md:drop-shadow md:sticky md:top-0"
-    >
-      <div v-if="output">
+  <FormKit type="group" v-model="data" @load="recompute" @input="recompute">
+    <div class="flex flex-col md:flex-row">
+      <main class="min-h-screen p-4 pt-2 mx-auto max-w-4xl">
         <div>
-          Tax Year <span class="float-right">{{ output.year }}</span>
+          <p class="text-xl md:text-2xl text-gray-600 font-bold"><a href="/">taxsim.app</a></p>
+          <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight">
+            an interactive US Individual Income Tax simulator.
+            <br/>
+            calcuations occur in your browser using a <a class="decoration-slate-300 underline" href="https://github.com/tmm1/taxsim.js">WASM build</a> of <a class="decoration-slate-300 underline" href="https://taxsim.nber.org">NBER TAXSIM</a>.
+          </p>
+          <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4 pt-1">
+            <FormKitSchema :schema="schemaLaws" :data="schemaData" />
+          </div>
         </div>
-        <div>AGI <amount class="float-right" :value="output.v10" /></div>
-        <div v-if="output.fiitax >= 0">Tax <amount class="float-right" :value="output.fiitax" /></div>
-        <div v-else>Tax Refund <amount class="float-right" :value="output.fiitax * -1" /></div>
-      </div>
-      <div v-if="false">
-        <h2>Input</h2>
-        <pre class="data">{{ data }}</pre>
+        <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
+          <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+              <div class="w-full border-t border-gray-300" />
+            </div>
+            <div class="relative flex justify-center">
+              <span class="px-3 bg-white text-lg font-medium text-gray-900"> Demographics </span>
+            </div>
+          </div>
 
-        <h2>Output</h2>
-        <pre class="data">{{ output }}</pre>
-      </div>
-    </aside>
-  </div>
+          <FormKitSchema :schema="schemaDemographics" :data="schemaData" />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+        <div>
+          <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+              <div class="w-full border-t border-gray-300" />
+            </div>
+            <div class="relative flex justify-center">
+              <span class="px-3 bg-white text-lg font-medium text-gray-900"> Deductions &amp; Credits </span>
+            </div>
+          </div>
+
+          <FormKitSchema :schema="schemaCredits" :data="schemaData" />
+        </div>
+        <div>
+          <div class="relative col-start-0 col-span-2 md:col-span-4 mt-3 mb-6">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+              <div class="w-full border-t border-gray-300" />
+            </div>
+            <div class="relative flex justify-center">
+              <span class="px-3 bg-white text-lg font-medium text-gray-900"> Income </span>
+            </div>
+          </div>
+
+          <FormKitSchema :schema="schemaIncome" :data="schemaData" />
+        </div>
+        </div>
+      </main>
+      <aside class="flex flex-col mb-auto min-h-screen w-screen md:w-1/4 p-4 hidden">
+        <div v-if="output">
+          <div>
+            Tax Year <span class="float-right">{{ output.year }}</span>
+          </div>
+          <div>AGI <amount class="float-right">{output.v10}}</amount></div>
+        </div>
+        <div v-if="true">
+          <h2>Input</h2>
+          <pre class="data">{{ data }}</pre>
+
+          <h2>Output</h2>
+          <pre class="data">{{ output }}</pre>
+        </div>
+      </aside>
+    </div>
+  </FormKit>
 </template>
 
 <style lang="postcss">
