@@ -50,11 +50,13 @@ const stateVars = [
   {
     name: 'v34',
     label: 'Standard Deduction',
+    if: '$output.v34 > $output.v35',
     neg: true,
   },
   {
     name: 'v35',
     label: 'Itemized Deductions',
+    if: '$output.v35 > $output.v34',
     neg: true,
   },
   {
@@ -91,7 +93,7 @@ function varsToRows(vars) {
         attrs: {
           class: 'text-left col-span-2',
         },
-        if: `$output.${o.name} * 1 != 0`,
+        if: [`$output.${o.name} * 1 != 0`, o.if].filter(o => !!o).join(" && "),
         children: [
           {
             $el: 'span',
@@ -111,7 +113,7 @@ function varsToRows(vars) {
       },
       {
         $cmp: 'amount',
-        if: `$output.${o.name} * 1 != 0`,
+        if: [`$output.${o.name} * 1 != 0`, o.if].filter(o => !!o).join(" && "),
         props: {
           class: 'text-right col-start-3',
           neg: o.neg,
