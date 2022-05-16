@@ -12,7 +12,7 @@ export default createInput(
           $el: 'div',
           children: [
             {
-              $el: 'span',
+              $el: 'button',
               children: '-',
             },
           ],
@@ -42,7 +42,7 @@ export default createInput(
           $el: 'div',
           children: [
             {
-              $el: 'span',
+              $el: 'button',
               children: '+',
             },
           ],

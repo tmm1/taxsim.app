@@ -682,8 +682,8 @@ pre.data {
     border: 1px solid var(--fk-color-border);
     border-radius: 50%;
   }
-  .formkit-prefix span,
-  .formkit-suffix span {
+  .formkit-prefix button,
+  .formkit-suffix button {
     @apply font-medium;
     position: absolute;
     top: 48%;
