@@ -552,10 +552,10 @@ onErrorCaptured(err => {
           </div>
         </div>
         <div class="mt-3 mb-3 border-t border-gray-100 pt-8 footer">
-          <p class="text-center text-sm md:text-md text-gray-500 pb-2 leading-tight">
-            taxsim.app is an <a href="https://github.com/tmm1/taxsim.app">open-source project</a>
+          <p class="text-center text-sm md:text-md text-gray-400 pb-2 leading-tight">
+            taxsim.app is <a href="https://github.com/tmm1/taxsim.app">open-source</a> and free to use
             <br />
-            tax scenarios are calculated locally in your browser using a
+            tax scenarios are calculated locally in your browser, using a
             <a href="https://github.com/tmm1/taxsim.js">WASM build</a> of
             <a href="https://taxsim.nber.org">NBER TAXSIM</a>
           </p>
