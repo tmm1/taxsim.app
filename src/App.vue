@@ -15,11 +15,13 @@ const federalVars = [
   {
     name: 'v13',
     label: 'Standard Deduction',
+    if: '$output.v10 > 0',
     neg: true,
   },
   {
     name: 'v17',
     label: 'Itemized Deductions',
+    if: '$output.v10 > 0',
     neg: true,
   },
   {
@@ -48,13 +50,13 @@ const stateVars = [
   {
     name: 'v34',
     label: 'Standard Deduction',
-    if: '$output.v34 > $output.v35',
+    if: '$output.v34 > $output.v35 && $output.v32 > 0',
     neg: true,
   },
   {
     name: 'v35',
     label: 'Itemized Deductions',
-    if: '$output.v35 > $output.v34',
+    if: '$output.v35 > $output.v34 && $output.v32 > 0',
     neg: true,
   },
   {
@@ -145,7 +147,7 @@ const outputFederal = {
     {
       $el: 'div',
       attrs: {
-        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500',
+        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(federalVars),
     },
@@ -175,7 +177,7 @@ const outputState = {
     {
       $el: 'div',
       attrs: {
-        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500',
+        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(stateVars),
     },
