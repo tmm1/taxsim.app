@@ -13,6 +13,14 @@ const federalVars = [
     name: 'v18',
     label: 'Taxable Income',
   },
+  {
+    name: 'v27',
+    label: 'AMT',
+  },
+  {
+    name: 'v43',
+    label: 'NIIT',
+  },
 ]
 const stateVars = [
   {
@@ -45,6 +53,43 @@ const schemaState = {
   options: states,
   help: 'State tax calculations are available from 1977 onwards',
 }
+function varsToRows(vars) {
+  return vars
+    .map(o => [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'text-left col-span-2',
+        },
+        if: `$output.${o.name} * 1 > 0`,
+        children: [
+          {
+            $el: 'span',
+            attrs: {
+              class: 'hidden',
+            },
+            children: o.label,
+          },
+          {
+            $el: 'span',
+            attrs: {
+              class: '',
+            },
+            children: o.label,
+          },
+        ],
+      },
+      {
+        $cmp: 'amount',
+        if: `$output.${o.name} * 1 > 0`,
+        props: {
+          class: 'text-right col-start-3',
+        },
+        children: `$output.${o.name}`,
+      },
+    ])
+    .flat()
+}
 const outputFederal = {
   $el: 'div',
   attrs: {
@@ -71,39 +116,7 @@ const outputFederal = {
       attrs: {
         class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500',
       },
-      children: federalVars
-        .map(o => [
-          {
-            $el: 'div',
-            attrs: {
-              class: 'text-left col-span-2',
-            },
-            children: [
-              {
-                $el: 'span',
-                attrs: {
-                  class: 'hidden',
-                },
-                children: o.label,
-              },
-              {
-                $el: 'span',
-                attrs: {
-                  class: '',
-                },
-                children: o.label,
-              },
-            ],
-          },
-          {
-            $cmp: 'amount',
-            props: {
-              class: 'text-right col-start-3',
-            },
-            children: `$output.${o.name}`,
-          },
-        ])
-        .flat(),
+      children: varsToRows(federalVars),
     },
   ],
 }
@@ -133,39 +146,7 @@ const outputState = {
       attrs: {
         class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500',
       },
-      children: stateVars
-        .map(o => [
-          {
-            $el: 'div',
-            attrs: {
-              class: 'text-left col-span-2',
-            },
-            children: [
-              {
-                $el: 'span',
-                attrs: {
-                  class: 'hidden',
-                },
-                children: o.label,
-              },
-              {
-                $el: 'span',
-                attrs: {
-                  class: '',
-                },
-                children: o.label,
-              },
-            ],
-          },
-          {
-            $cmp: 'amount',
-            props: {
-              class: 'text-right col-start-3',
-            },
-            children: `$output.${o.name}`,
-          },
-        ])
-        .flat(),
+      children: varsToRows(stateVars),
     },
   ],
 }
