@@ -26,7 +26,7 @@ const stateVars = [
 ]
 const schemaFederal = {
   $formkit: 'numeric',
-  outerClass: 'col-span-1 md:col-span-2',
+  outerClass: 'col-span-1 md:col-span-2 mb-1',
   inputClass: 'font-semibold',
   name: 'year',
   id: 'year',
@@ -39,11 +39,11 @@ const schemaState = {
   $formkit: 'select',
   name: 'state',
   id: 'state',
-  help: 'State tax calculations are available from 1977 onwards',
   value: params.get('state') || 0,
-  outerClass: 'w-full col-span-1 md:col-span-2',
-  inputClass: 'font-semibold text-center indent-[48%]',
+  outerClass: 'w-full col-span-1 md:col-span-2 mb-1',
+  inputClass: 'font-semibold text-center',
   options: states,
+  help: 'State tax calculations are available from 1977 onwards',
 }
 const outputFederal = {
   $el: 'div',
@@ -515,7 +515,7 @@ onErrorCaptured(err => {
           <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight -mt-[0.1em]">
             <span class="font-semibold">an interactive US Individual Income Tax simulator</span>
           </p>
-          <div class="grid grid-cols-2 gap-x-8 md:grid-cols-4 pt-3 pb-3">
+          <div class="grid grid-cols-2 gap-x-4 md:gap-x-12 md:grid-cols-4 pt-3 pb-3 md:px-12">
             <FormKitSchema
               :schema="[schemaFederal, schemaState, outputFederal, outputState].flat()"
               :data="schemaData"
