@@ -345,6 +345,7 @@ const schemaIncome = incomeVars
     name: item.name,
     label: item.label,
     outerClass: "col-span-2",
+    if: `$addIncome || $visible.${item.name}`,
     min: item.type == 'gainorloss' ? -MAX : 0,
     max: item.max || MAX,
     step: STEP,
@@ -446,6 +447,7 @@ const schemaCredits = creditOuts
       label: item.label,
       help: item.help,
       outerClass: 'col-span-2',
+      if: `$addCredits || $visible.${item.name}`,
       max: item.max || MAX,
       step: STEP,
       delay: 0,
@@ -483,10 +485,18 @@ const schemaCredits = creditOuts
 
 const output = ref({})
 const data = reactive({})
+const visible = ref({})
 const addCredits = ref(false)
 const addIncome = ref(false)
 
+for (let o of [incomeVars, creditsVars].flat()) {
+  if (getParam(o.name)) {
+    visible.value = {...visible.value, [o.name]: true}
+  }
+}
+
 const schemaData = reactive({
+  visible,
   output,
   addCredits,
   addIncome,
@@ -528,6 +538,7 @@ function filingStatus(input) {
 }
 
 async function recompute(input) {
+  var usedInputs = {}
   var url = new URL(window.location)
   for (let k in data) {
     let v = data[k]
@@ -536,8 +547,10 @@ async function recompute(input) {
       continue
     }
     url.searchParams.set(k, v)
+    usedInputs[k] = true
   }
   window.history.replaceState('', '', url)
+  visible.value = usedInputs
 
   let res = await taxsim({
     ...input,
