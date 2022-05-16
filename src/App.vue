@@ -338,32 +338,47 @@ const incomeVars = [
 ]
 const MAX = 500 * 1000
 const STEP = 500
-const schemaIncome = incomeVars.map(item => ({
-  $formkit: 'amount',
-  id: item.name,
-  name: item.name,
-  label: item.label,
-  outerClass: 'col-span-2',
-  min: item.type == 'gainorloss' ? -MAX : 0,
-  max: item.max || MAX,
-  step: STEP,
-  delay: 0,
-  value: getParam(item.name) || 0,
-  sectionsSchema: {
-    label: {
-      children: [
-        '$label',
-        {
-          $cmp: 'amount',
-          props: {
-            class: 'float-right',
+const schemaIncome = incomeVars
+  .map(item => ({
+    $formkit: 'amount',
+    id: item.name,
+    name: item.name,
+    label: item.label,
+    outerClass: "col-span-2",
+    min: item.type == 'gainorloss' ? -MAX : 0,
+    max: item.max || MAX,
+    step: STEP,
+    delay: 0,
+    value: getParam(item.name) || 0,
+    sectionsSchema: {
+      label: {
+        children: [
+          '$label',
+          {
+            $cmp: 'amount',
+            props: {
+              class: 'float-right',
+            },
+            children: '$value',
           },
-          children: '$value',
-        },
-      ],
+        ],
+      },
     },
-  },
-}))
+  }))
+  .concat([
+    {
+      $el: 'button',
+      attrs: {
+        class: 'block p-2 px-4 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
+        onClick: '$toggleAddIncome',
+      },
+      children: {
+        if: '$addIncome',
+        then: ['Save'],
+        else: ['+ ', ' Add'],
+      }
+    },
+  ])
 
 const creditsVars = [
   {
@@ -451,12 +466,36 @@ const schemaCredits = creditOuts
       },
     }))
   )
+  .concat([
+    {
+      $el: 'button',
+      attrs: {
+        class: 'block p-2 px-4 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
+        onClick: '$toggleAddCredits',
+      },
+      children: {
+        if: '$addCredits',
+        then: ['Save'],
+        else: ['+ ', ' Add'],
+      }
+    },
+  ])
 
 const output = ref({})
 const data = reactive({})
+const addCredits = ref(false)
+const addIncome = ref(false)
 
 const schemaData = reactive({
   output,
+  addCredits,
+  addIncome,
+  toggleAddIncome: () => {
+    addIncome.value = !addIncome.value
+  },
+  toggleAddCredits: () => {
+    addCredits.value = !addCredits.value
+  },
   filingStatusInfo: () => {
     switch (data.mstat) {
       case 'dependent':
@@ -545,7 +584,7 @@ onErrorCaptured(err => {
           <heading class="col-start-0 col-span-2 md:col-span-4">Demographics</heading>
           <FormKitSchema :schema="schemaDemographics" :data="schemaData" />
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-6">
           <div>
             <heading class="col-start-0 col-span-2 md:col-span-4">Deductions &amp; Credits</heading>
             <FormKitSchema :schema="schemaCredits" :data="schemaData" />
@@ -622,8 +661,9 @@ pre.data {
   }
   .formkit-prefix span,
   .formkit-suffix span {
+    @apply font-medium;
     position: absolute;
-    top: 50%;
+    top: 48%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
