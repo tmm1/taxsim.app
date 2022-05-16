@@ -3,6 +3,16 @@ import {ref, reactive, onErrorCaptured, toRaw} from 'vue'
 
 const url = new URL(window.location)
 const params = url.searchParams || {get: () => null}
+const federalVars = [
+  {
+    name: 'v10',
+    label: 'AGI',
+  },
+  {
+    name: 'v18',
+    label: 'Taxable Income',
+  },
+]
 const schemaFederal = [
   {
     $formkit: 'numeric',
@@ -18,7 +28,7 @@ const schemaFederal = [
   {
     $el: 'div',
     attrs: {
-      class: 'col-span-1 md:col-span-3 rounded-md p-2 border border-gray-200 h-fit text-center',
+      class: 'col-span-1 md:col-span-1 rounded-md p-2 border border-gray-200 h-fit text-center',
     },
     if: '$output.fiitax',
     children: [
@@ -35,6 +45,43 @@ const schemaFederal = [
           class: 'text-sm text-gray-500',
         },
         children: 'Federal Tax',
+      },
+      {
+        $el: 'div',
+        attrs: {
+          class: 'border-t border-gray-100 pt-3 mt-2 px-4 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500',
+        },
+        children: federalVars.map(o => [
+          {
+            $el: 'div',
+            attrs: {
+              class: 'text-left col-span-2',
+            },
+            children: [
+              {
+                $el: 'span',
+                attrs: {
+                  class: 'hidden',
+                },
+                children: o.label,
+              },
+              {
+                $el: 'span',
+                attrs: {
+                  class: '',
+                },
+                children: o.label,
+              },
+            ],
+          },
+          {
+            $cmp: 'amount',
+            props: {
+              class: 'text-right col-start-3',
+            },
+            children: `$output.${o.name}`,
+          },
+        ]).flat(),
       },
     ],
   },
@@ -443,10 +490,10 @@ onErrorCaptured(err => {
       <main class="min-h-screen p-4 pt-2 mx-auto max-w-4xl">
         <div>
           <p class="text-xl md:text-2xl text-gray-600 font-bold"><a href="/">taxsim.app</a></p>
-          <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight">
+          <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight -mt-[0.1em]">
             <span class="font-semibold">an interactive US Individual Income Tax simulator</span>
           </p>
-          <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4 pt-1">
+          <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4 pt-3 pb-3">
             <FormKitSchema :schema="schemaFederal" :data="schemaData" />
           </div>
         </div>
