@@ -239,6 +239,7 @@ const schemaDemographics = [
       else: {
         if: '$get(year).value * 1 == 2021',
         then: 'Affects Child Tax Credit',
+        else: ''
       }
     },
   },
@@ -259,7 +260,11 @@ const schemaDemographics = [
           class: 'text-xs text-gray-500 -mt-1 mb-2',
         },
         if: '$get(depx).value * 1 > 0',
-        children: 'Affects EITC, CTC and CCC.',
+        children: {
+          if: '$get(year).value * 1 == 2021',
+          then: 'Affects EITC, CTC and CCC',
+          else: 'Affects EITC',
+        },
       },
       {
         $formkit: 'numeric',
