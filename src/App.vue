@@ -79,7 +79,7 @@ const schemaState = {
   id: 'state',
   value: params.get('state') || 0,
   outerClass: 'w-full col-span-1 md:col-span-2 mb-1',
-  inputClass: 'font-semibold text-center',
+  inputClass: 'font-semibold text-center md:indent-2',
   options: states,
   help: 'State tax calculations are available from 1977 onwards',
 }
