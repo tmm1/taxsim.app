@@ -3,19 +3,40 @@ import {ref, reactive, toRaw} from 'vue'
 
 const url = new URL(window.location)
 const params = url.searchParams || {get: () => null}
-const schemaLaws = [
-  {
+const schemaFederal = [{
     $formkit: 'numeric',
     outerClass: 'col-span-1 md:col-span-2',
-    inputClass: 'font-bold',
+    inputClass: 'font-semibold',
     name: 'year',
     id: 'year',
     value: params.get('year') || '2020',
     min: 1960,
     max: new Date().getFullYear() + 1,
     help: 'Federal tax calculations are available from 1960 onwards',
+}, {
+  $el: 'div',
+  attrs: {
+    class: 'col-span-1 md:col-span-2 rounded-md p-2 border border-gray-200 h-fit text-center',
   },
-  {
+  if: '$output.fiitax',
+  children: [
+    {
+      $cmp: 'amount',
+      props: {
+        class: 'font-semibold',
+      },
+      children: '$output.fiitax',
+    },
+      {
+        $el: 'p',
+        attrs: {
+          class: 'text-sm text-gray-500',
+        },
+        children: 'Federal Tax',
+      }
+  ]
+}]
+const schemaState = {
     $formkit: 'select',
     name: 'state',
     help: 'State tax calculations are available from 1977 onwards',
@@ -75,8 +96,7 @@ const schemaLaws = [
       50: 'Wisconsin',
       51: 'Wyoming',
     },
-  },
-]
+}
 
 const schemaDemographics = [
   {
@@ -285,10 +305,6 @@ const creditOuts = [
     label: 'Child Tax Credit',
   },
   {
-    name: 'v23',
-    label: 'Additional CTC',
-  },
-  {
     name: 'v24',
     label: 'Child Care Credit',
   },
@@ -352,7 +368,7 @@ const schemaCredits = creditOuts
     }))
   )
 
-const output = ref(null)
+const output = ref({})
 const data = reactive({})
 
 const schemaData = reactive({
@@ -422,12 +438,12 @@ async function recompute(input) {
           <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight">
             an interactive US Individual Income Tax simulator.
             <br />
-            calcuations occur in your browser using a
+            calculated locally in your browser using a
             <a class="decoration-slate-300 underline" href="https://github.com/tmm1/taxsim.js">WASM build</a> of
             <a class="decoration-slate-300 underline" href="https://taxsim.nber.org">NBER TAXSIM</a>.
           </p>
           <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4 pt-1">
-            <FormKitSchema :schema="schemaLaws" :data="schemaData" />
+            <FormKitSchema :schema="schemaFederal" :data="schemaData" />
           </div>
         </div>
         <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
