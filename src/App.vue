@@ -14,79 +14,6 @@ const federalVars = [
     label: 'Taxable Income',
   },
 ]
-const schemaFederal = [
-  {
-    $formkit: 'numeric',
-    outerClass: 'col-span-1',
-    inputClass: 'font-semibold',
-    name: 'year',
-    id: 'year',
-    value: params.get('year') || '2020',
-    min: 1960,
-    max: new Date().getFullYear() + 1,
-    help: 'Federal tax calculations are available from 1960 onwards',
-  },
-  {
-    $el: 'div',
-    attrs: {
-      class: 'col-span-1 md:col-span-1 rounded-md p-2 border border-gray-200 h-fit text-center',
-    },
-    if: '$output.fiitax',
-    children: [
-      {
-        $cmp: 'amount',
-        props: {
-          class: 'font-semibold',
-        },
-        children: '$output.fiitax',
-      },
-      {
-        $el: 'p',
-        attrs: {
-          class: 'text-sm text-gray-500',
-        },
-        children: 'Federal Tax',
-      },
-      {
-        $el: 'div',
-        attrs: {
-          class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500',
-        },
-        children: federalVars.map(o => [
-          {
-            $el: 'div',
-            attrs: {
-              class: 'text-left col-span-2',
-            },
-            children: [
-              {
-                $el: 'span',
-                attrs: {
-                  class: 'hidden',
-                },
-                children: o.label,
-              },
-              {
-                $el: 'span',
-                attrs: {
-                  class: '',
-                },
-                children: o.label,
-              },
-            ],
-          },
-          {
-            $cmp: 'amount',
-            props: {
-              class: 'text-right col-start-3',
-            },
-            children: `$output.${o.name}`,
-          },
-        ]).flat(),
-      },
-    ],
-  },
-]
 const stateVars = [
   {
     name: 'v32',
@@ -97,42 +24,55 @@ const stateVars = [
     label: 'Taxable Income',
   },
 ]
-const schemaState = [{
+const schemaFederal = {
+  $formkit: 'numeric',
+  outerClass: 'col-span-1 md:col-span-2',
+  inputClass: 'font-semibold',
+  name: 'year',
+  id: 'year',
+  value: params.get('year') || '2020',
+  min: 1960,
+  max: new Date().getFullYear() + 1,
+  help: 'Federal tax calculations are available from 1960 onwards',
+}
+const schemaState = {
   $formkit: 'select',
   name: 'state',
   id: 'state',
   help: 'State tax calculations are available from 1977 onwards',
   value: params.get('state') || 0,
-  outerClass: 'w-full col-span-1',
-  inputClass: 'font-semibold text-center',
+  outerClass: 'w-full col-span-1 md:col-span-2',
+  inputClass: 'font-semibold text-center indent-[48%]',
   options: states,
-}, {
-    $el: 'div',
-    attrs: {
-      class: 'col-span-1 md:col-span-1 rounded-md p-2 border border-gray-200 h-fit text-center',
+}
+const outputFederal = {
+  $el: 'div',
+  attrs: {
+    class: 'col-span-1 md:col-span-2 rounded-md p-2 border border-gray-200 h-fit text-center',
+  },
+  if: '$output.fiitax',
+  children: [
+    {
+      $cmp: 'amount',
+      props: {
+        class: 'font-semibold',
+      },
+      children: '$output.fiitax',
     },
-    if: '$get(state).value',
-    children: [
-      {
-        $cmp: 'amount',
-        props: {
-          class: 'font-semibold',
-        },
-        children: '$output.siitax',
+    {
+      $el: 'p',
+      attrs: {
+        class: 'text-sm text-gray-500',
       },
-      {
-        $el: 'p',
-        attrs: {
-          class: 'text-sm text-gray-500',
-        },
-        children: 'State Tax',
+      children: 'Federal Tax',
+    },
+    {
+      $el: 'div',
+      attrs: {
+        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500',
       },
-      {
-        $el: 'div',
-        attrs: {
-          class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500',
-        },
-        children: stateVars.map(o => [
+      children: federalVars
+        .map(o => [
           {
             $el: 'div',
             attrs: {
@@ -162,10 +102,73 @@ const schemaState = [{
             },
             children: `$output.${o.name}`,
           },
-        ]).flat(),
+        ])
+        .flat(),
+    },
+  ],
+}
+const outputState = {
+  $el: 'div',
+  attrs: {
+    class: 'col-span-1 md:col-span-2 rounded-md p-2 border border-gray-200 h-fit text-center',
+  },
+  if: '$get(state).value',
+  children: [
+    {
+      $cmp: 'amount',
+      props: {
+        class: 'font-semibold',
       },
-    ],
-}]
+      children: '$output.siitax',
+    },
+    {
+      $el: 'p',
+      attrs: {
+        class: 'text-sm text-gray-500',
+      },
+      children: 'State Tax',
+    },
+    {
+      $el: 'div',
+      attrs: {
+        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500',
+      },
+      children: stateVars
+        .map(o => [
+          {
+            $el: 'div',
+            attrs: {
+              class: 'text-left col-span-2',
+            },
+            children: [
+              {
+                $el: 'span',
+                attrs: {
+                  class: 'hidden',
+                },
+                children: o.label,
+              },
+              {
+                $el: 'span',
+                attrs: {
+                  class: '',
+                },
+                children: o.label,
+              },
+            ],
+          },
+          {
+            $cmp: 'amount',
+            props: {
+              class: 'text-right col-start-3',
+            },
+            children: `$output.${o.name}`,
+          },
+        ])
+        .flat(),
+    },
+  ],
+}
 
 const schemaDemographics = [
   {
@@ -512,8 +515,11 @@ onErrorCaptured(err => {
           <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight -mt-[0.1em]">
             <span class="font-semibold">an interactive US Individual Income Tax simulator</span>
           </p>
-          <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4 pt-3 pb-3">
-            <FormKitSchema :schema="[schemaFederal, schemaState].flat()" :data="schemaData" />
+          <div class="grid grid-cols-2 gap-x-8 md:grid-cols-4 pt-3 pb-3">
+            <FormKitSchema
+              :schema="[schemaFederal, schemaState, outputFederal, outputState].flat()"
+              :data="schemaData"
+            />
           </div>
         </div>
         <div v-if="error">{{ error }}</div>
