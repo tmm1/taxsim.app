@@ -5,7 +5,7 @@ const url = new URL(window.location)
 const params = url.searchParams || {get: () => null}
 const schemaFederal = [{
     $formkit: 'numeric',
-    outerClass: 'col-span-1 md:col-span-2',
+    outerClass: 'col-span-1',
     inputClass: 'font-semibold',
     name: 'year',
     id: 'year',
@@ -16,7 +16,7 @@ const schemaFederal = [{
 }, {
   $el: 'div',
   attrs: {
-    class: 'col-span-1 md:col-span-2 rounded-md p-2 border border-gray-200 h-fit text-center',
+    class: 'col-span-1 md:col-span-3 rounded-md p-2 border border-gray-200 h-fit text-center',
   },
   if: '$output.fiitax',
   children: [
@@ -436,11 +436,11 @@ async function recompute(input) {
         <div>
           <p class="text-xl md:text-2xl text-gray-600 font-bold"><a href="/">taxsim.app</a></p>
           <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight">
-            an interactive US Individual Income Tax simulator.
+            <span class="font-semibold">an interactive US Individual Income Tax simulator</span>
             <br />
-            calculated locally in your browser using a
+            tax scenarios are calculated locally in your browser using a
             <a class="decoration-slate-300 underline" href="https://github.com/tmm1/taxsim.js">WASM build</a> of
-            <a class="decoration-slate-300 underline" href="https://taxsim.nber.org">NBER TAXSIM</a>.
+            <a class="decoration-slate-300 underline" href="https://taxsim.nber.org">NBER TAXSIM</a>
           </p>
           <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4 pt-1">
             <FormKitSchema :schema="schemaFederal" :data="schemaData" />
