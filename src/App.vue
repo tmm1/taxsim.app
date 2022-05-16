@@ -1,9 +1,10 @@
 <script setup>
-import {ref, reactive, toRaw} from 'vue'
+import {ref, reactive, onErrorCaptured, toRaw} from 'vue'
 
 const url = new URL(window.location)
 const params = url.searchParams || {get: () => null}
-const schemaFederal = [{
+const schemaFederal = [
+  {
     $formkit: 'numeric',
     outerClass: 'col-span-1',
     inputClass: 'font-semibold',
@@ -13,89 +14,91 @@ const schemaFederal = [{
     min: 1960,
     max: new Date().getFullYear() + 1,
     help: 'Federal tax calculations are available from 1960 onwards',
-}, {
-  $el: 'div',
-  attrs: {
-    class: 'col-span-1 md:col-span-3 rounded-md p-2 border border-gray-200 h-fit text-center',
   },
-  if: '$output.fiitax',
-  children: [
-    {
-      $cmp: 'amount',
-      props: {
-        class: 'font-semibold',
-      },
-      children: '$output.fiitax',
+  {
+    $el: 'div',
+    attrs: {
+      class: 'col-span-1 md:col-span-3 rounded-md p-2 border border-gray-200 h-fit text-center',
     },
+    if: '$output.fiitax',
+    children: [
+      {
+        $cmp: 'amount',
+        props: {
+          class: 'font-semibold',
+        },
+        children: '$output.fiitax',
+      },
       {
         $el: 'p',
         attrs: {
           class: 'text-sm text-gray-500',
         },
         children: 'Federal Tax',
-      }
-  ]
-}]
+      },
+    ],
+  },
+]
 const schemaState = {
-    $formkit: 'select',
-    name: 'state',
-    help: 'State tax calculations are available from 1977 onwards',
-    value: params.get('state') || 0,
-    outerClass: 'w-full col-span-1 md:col-span-2 xsticky xtop-[2em] bg-white',
-    options: {
-      0: '',
-      1: 'Alabama',
-      2: 'Alaska',
-      3: 'Arizona',
-      4: 'Arkansas',
-      5: 'California',
-      6: 'Colorado',
-      7: 'Connecticut',
-      8: 'Delaware',
-      9: 'DC',
-      10: 'Florida',
-      11: 'Georgia',
-      12: 'Hawaii',
-      13: 'Idaho',
-      14: 'Illinois',
-      15: 'Indiana',
-      16: 'Iowa',
-      17: 'Kansas',
-      18: 'Kentucky',
-      19: 'Louisiana',
-      20: 'Maine',
-      21: 'Maryland',
-      22: 'Massachusetts',
-      23: 'Michigan',
-      24: 'Minnesota',
-      25: 'Mississippi',
-      26: 'Missouri',
-      27: 'Montana',
-      28: 'Nebraska',
-      29: 'Nevada',
-      30: 'New Hampshire',
-      31: 'New Jersey',
-      32: 'New Mexico',
-      33: 'New York',
-      34: 'North Carolina',
-      35: 'North Dakota',
-      36: 'Ohio',
-      37: 'Oklahoma',
-      38: 'Oregon',
-      39: 'Pennsylvania',
-      40: 'Rhode Island',
-      41: 'South Carolina',
-      42: 'South Dakota',
-      43: 'Tennessee',
-      44: 'Texas',
-      45: 'Utah',
-      46: 'Vermont',
-      47: 'Virginia',
-      48: 'Washington',
-      49: 'West Virginia',
-      50: 'Wisconsin',
-      51: 'Wyoming',
-    },
+  $formkit: 'select',
+  name: 'state',
+  help: 'State tax calculations are available from 1977 onwards',
+  value: params.get('state') || 0,
+  outerClass: 'w-full col-span-1 md:col-span-2 xsticky xtop-[2em] bg-white',
+  options: {
+    0: '',
+    1: 'Alabama',
+    2: 'Alaska',
+    3: 'Arizona',
+    4: 'Arkansas',
+    5: 'California',
+    6: 'Colorado',
+    7: 'Connecticut',
+    8: 'Delaware',
+    9: 'DC',
+    10: 'Florida',
+    11: 'Georgia',
+    12: 'Hawaii',
+    13: 'Idaho',
+    14: 'Illinois',
+    15: 'Indiana',
+    16: 'Iowa',
+    17: 'Kansas',
+    18: 'Kentucky',
+    19: 'Louisiana',
+    20: 'Maine',
+    21: 'Maryland',
+    22: 'Massachusetts',
+    23: 'Michigan',
+    24: 'Minnesota',
+    25: 'Mississippi',
+    26: 'Missouri',
+    27: 'Montana',
+    28: 'Nebraska',
+    29: 'Nevada',
+    30: 'New Hampshire',
+    31: 'New Jersey',
+    32: 'New Mexico',
+    33: 'New York',
+    34: 'North Carolina',
+    35: 'North Dakota',
+    36: 'Ohio',
+    37: 'Oklahoma',
+    38: 'Oregon',
+    39: 'Pennsylvania',
+    40: 'Rhode Island',
+    41: 'South Carolina',
+    42: 'South Dakota',
+    43: 'Tennessee',
+    44: 'Texas',
+    45: 'Utah',
+    46: 'Vermont',
+    47: 'Virginia',
+    48: 'Washington',
+    49: 'West Virginia',
+    50: 'Wisconsin',
+    51: 'Wyoming',
+  },
 }
 
 const schemaDemographics = [
@@ -427,6 +430,11 @@ async function recompute(input) {
   }
   output.value = out
 }
+
+const error = ref()
+onErrorCaptured(err => {
+  error.value = err
+})
 </script>
 
 <template>
@@ -437,31 +445,34 @@ async function recompute(input) {
           <p class="text-xl md:text-2xl text-gray-600 font-bold"><a href="/">taxsim.app</a></p>
           <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight">
             <span class="font-semibold">an interactive US Individual Income Tax simulator</span>
-            <br />
-            tax scenarios are calculated locally in your browser using a
-            <a class="decoration-slate-300 underline" href="https://github.com/tmm1/taxsim.js">WASM build</a> of
-            <a class="decoration-slate-300 underline" href="https://taxsim.nber.org">NBER TAXSIM</a>
           </p>
           <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4 pt-1">
             <FormKitSchema :schema="schemaFederal" :data="schemaData" />
           </div>
         </div>
+        <div v-if="error">{{ error }}</div>
         <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
           <heading class="col-start-0 col-span-2 md:col-span-4">Demographics</heading>
-
           <FormKitSchema :schema="schemaDemographics" :data="schemaData" />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
           <div>
             <heading class="col-start-0 col-span-2 md:col-span-4">Deductions &amp; Credits</heading>
-
             <FormKitSchema :schema="schemaCredits" :data="schemaData" />
           </div>
           <div>
             <heading class="col-start-0 col-span-2 md:col-span-4">Income</heading>
-
             <FormKitSchema :schema="schemaIncome" :data="schemaData" />
           </div>
+        </div>
+        <div class="mt-3 mb-3 border-t border-gray-100 pt-8 footer">
+          <p class="text-center text-sm md:text-md text-gray-500 pb-2 leading-tight">
+            taxsim.app is an <a href="https://github.com/tmm1/taxsim.app">open-source project</a>
+            <br />
+            tax scenarios are calculated locally in your browser using a
+            <a href="https://github.com/tmm1/taxsim.js">WASM build</a> of
+            <a href="https://taxsim.nber.org">NBER TAXSIM</a>
+          </p>
         </div>
       </main>
       <aside class="flex flex-col mb-auto min-h-screen w-screen md:w-1/4 p-4 hidden">
@@ -484,6 +495,9 @@ async function recompute(input) {
 </template>
 
 <style lang="postcss">
+.footer a {
+  @apply decoration-slate-300 underline;
+}
 pre.data {
   @apply font-mono mx-10 my-4;
   font-size: 10pt;
