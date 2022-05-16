@@ -27,6 +27,7 @@ const federalVars = [
   {
     name: 'v18',
     label: 'Taxable Income',
+    if: '$output.v10 > 0 || true'
   },
   {
     name: 'v27',
@@ -62,6 +63,7 @@ const stateVars = [
   {
     name: 'v36',
     label: 'Taxable Income',
+    if: '$output.v32 >= 1 || true'
   },
 ]
 const schemaFederal = {
