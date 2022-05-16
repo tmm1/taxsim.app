@@ -2,8 +2,6 @@
 import {ref, reactive, onErrorCaptured, toRaw} from 'vue'
 import states from './states.js'
 
-const url = new URL(window.location)
-const params = url.searchParams || {get: () => null}
 const federalVars = [
   {
     name: 'v10',
@@ -70,7 +68,7 @@ const schemaFederal = {
   inputClass: 'font-semibold',
   name: 'year',
   id: 'year',
-  value: params.get('year') || '2020',
+  value: getParam('year') || '2020',
   min: 1960,
   max: new Date().getFullYear() + 1,
   help: 'Federal tax calculations are available from 1960 onwards',
@@ -79,7 +77,7 @@ const schemaState = {
   $formkit: 'select',
   name: 'state',
   id: 'state',
-  value: params.get('state') || 0,
+  value: getParam('state') || 0,
   outerClass: 'w-full col-span-1 md:col-span-2 mb-1',
   inputClass: 'font-semibold text-center md:indent-2',
   options: states,
@@ -198,7 +196,7 @@ const schemaDemographics = [
       headOfHousehold: 'Head of Household',
       dependent: 'Dependent Taxpayer',
     },
-    value: params.get('mstat') || 'single',
+    value: getParam('mstat') || 'single',
   },
   {
     $el: 'div',
@@ -209,7 +207,7 @@ const schemaDemographics = [
         label: 'Age',
         min: 0,
         placeholder: '0',
-        value: params.get('page'),
+        value: getParam('page'),
         help: '$: "Age of taxpayer as of 12/31/" + $get(year).value',
       },
       {
@@ -218,7 +216,7 @@ const schemaDemographics = [
         label: 'Spouse Age',
         min: 0,
         placeholder: '0',
-        value: params.get('sage'),
+        value: getParam('sage'),
         if: '$get(mstat).value == "married" || $get(mstat).value == "marriedFilingSeparately"',
         help: '$: "Age of spouse as of 12/31/" + $get(year).value',
       },
@@ -229,7 +227,7 @@ const schemaDemographics = [
     name: 'depx',
     id: 'depx',
     label: '# of Dependents',
-    value: params.get('depx'),
+    value: getParam('depx'),
     placeholder: '0',
     min: 0,
     if: '$get(mstat).value == "headOfHousehold" || $get(mstat).value == "married" || $get(mstat).value == "marriedFilingSeparately"',
@@ -260,14 +258,14 @@ const schemaDemographics = [
       {
         $formkit: 'numeric',
         name: 'age1',
-        value: params.get('age1') || '1',
+        value: getParam('age1') || '1',
         min: 1,
         if: '$get(depx).value * 1 > 0',
       },
       {
         $formkit: 'numeric',
         name: 'age2',
-        value: params.get('age2') || '1',
+        value: getParam('age2') || '1',
         outerClass: '-mt-3',
         min: 1,
         if: '$get(depx).value * 1 > 1',
@@ -275,7 +273,7 @@ const schemaDemographics = [
       {
         $formkit: 'numeric',
         name: 'age3',
-        value: params.get('age3') || '1',
+        value: getParam('age3') || '1',
         min: 1,
         outerClass: '-mt-3',
         if: '$get(depx).value * 1 > 2',
@@ -350,7 +348,7 @@ const schemaIncome = incomeVars.map(item => ({
   max: item.max || MAX,
   step: STEP,
   delay: 0,
-  value: params.get(item.name) || 0,
+  value: getParam(item.name) || 0,
   sectionsSchema: {
     label: {
       children: [
@@ -436,7 +434,7 @@ const schemaCredits = creditOuts
       max: item.max || MAX,
       step: STEP,
       delay: 0,
-      value: params.get(item.name) || 0,
+      value: getParam(item.name) || 0,
       sectionsSchema: {
         label: {
           children: [
@@ -468,6 +466,12 @@ const schemaData = reactive({
     }
   },
 })
+
+function getParam(name) {
+  const url = new URL(window.location)
+  const params = url.searchParams || {get: () => null}
+  return params.get(name)
+}
 
 function filingStatus(input) {
   switch (input) {
