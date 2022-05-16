@@ -2,7 +2,7 @@
 import {ref, reactive, onErrorCaptured, toRaw} from 'vue'
 import states from './states.js'
 
-const federalVars = [
+const federalIncomeVars = [
   {
     name: 'v10',
     label: 'AGI',
@@ -28,17 +28,55 @@ const federalVars = [
     name: 'v18',
     label: 'Taxable Income',
     if: '$output.v10 > 0 || true'
+  }
+]
+const federalTaxVars = [
+  {
+    name: 'v28',
+    label: 'Income Tax',
+  },
+  {
+    name: 'tfica',
+    label: 'FICA Tax Withheld',
+    pos: true,
   },
   {
     name: 'v27',
     label: 'AMT',
+    pos: true,
   },
   {
     name: 'v43',
     label: 'NIIT',
+    pos: true,
+  },
+  {
+    name: 'v21',
+    label: 'General Tax Credit',
+    neg: true,
+  },
+  {
+    name: 'v23',
+    label: 'Child Tax Credit',
+    neg: true,
+  },
+  {
+    name: 'v24',
+    label: 'Child Care Credit',
+    neg: true,
+  },
+  {
+    name: 'v25',
+    label: 'Earned Income Credit',
+    neg: true,
+  },
+  {
+    name: 'v45',
+    label: 'CARES Recovery Rebate',
+    neg: true,
   },
 ]
-const stateVars = [
+const stateIncomeVars = [
   {
     name: 'v32',
     label: 'AGI',
@@ -65,6 +103,8 @@ const stateVars = [
     label: 'Taxable Income',
     if: '$output.v32 >= 1 || true'
   },
+]
+const stateTaxVars = [
 ]
 const schemaFederal = {
   $formkit: 'numeric',
@@ -119,6 +159,7 @@ function varsToRows(vars) {
         props: {
           class: 'text-right col-start-3',
           neg: o.neg,
+          pos: o.pos,
         },
         children: `$output.${o.name}`,
       },
@@ -151,7 +192,14 @@ const outputFederal = {
       attrs: {
         class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
-      children: varsToRows(federalVars),
+      children: varsToRows(federalIncomeVars),
+    },
+    {
+      $el: 'div',
+      attrs: {
+        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+      },
+      children: varsToRows(federalTaxVars),
     },
   ],
 }
@@ -181,7 +229,14 @@ const outputState = {
       attrs: {
         class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
-      children: varsToRows(stateVars),
+      children: varsToRows(stateIncomeVars),
+    },
+    {
+      $el: 'div',
+      attrs: {
+        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+      },
+      children: varsToRows(stateTaxVars),
     },
   ],
 }
@@ -239,8 +294,8 @@ const schemaDemographics = [
       if: '$get(year).value * 1 <= 2017',
       then: 'Affects personal exemption calculation',
       else: {
-        if: '$get(year).value * 1 == 2021',
-        then: 'Affects Child Tax Credit',
+        if: '$get(year).value * 1 >= 2018',
+        then: 'Affects child tax credit',
         else: ''
       }
     },
@@ -265,7 +320,11 @@ const schemaDemographics = [
         children: {
           if: '$get(year).value * 1 == 2021',
           then: 'Affects EITC, CTC and CCC',
-          else: 'Affects EITC',
+          else: {
+            if: '$get(year).value * 1 >= 2018',
+            then: 'Affects EITC and CTC',
+            else: 'Affects EITC',
+          }
         },
       },
       {
@@ -589,6 +648,7 @@ async function recompute(input) {
     out[keys[i]] = val
   }
   output.value = out
+  error.value = null
 }
 
 const error = ref()
@@ -637,22 +697,14 @@ onErrorCaptured(err => {
             <a href="https://taxsim.nber.org">NBER TAXSIM</a>
           </p>
         </div>
-      </main>
-      <aside class="flex flex-col mb-auto min-h-screen w-screen md:w-1/4 p-4 hidden">
-        <div v-if="output">
-          <div>
-            Tax Year <span class="float-right">{{ output.year }}</span>
-          </div>
-          <div>AGI <amount class="float-right">{output.v10}}</amount></div>
-        </div>
-        <div v-if="true">
+        <div v-if="false">
           <h2>Input</h2>
           <pre class="data">{{ data }}</pre>
 
           <h2>Output</h2>
           <pre class="data">{{ output }}</pre>
         </div>
-      </aside>
+      </main>
     </div>
   </FormKit>
 </template>

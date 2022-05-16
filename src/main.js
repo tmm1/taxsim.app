@@ -19,9 +19,10 @@ let amount = (props, {slots}) => {
   if (props.neg) n *= -1
   let out = nformat(n)
   if (out == '$NaN') out = '$0'
+  if (props.pos) out = '+' + out
   return h('span', props, out)
 }
-amount.props = ['neg']
+amount.props = ['neg', 'pos']
 
 createApp(App)
   .component('amount', amount)
