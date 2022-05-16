@@ -10,6 +10,21 @@ const federalVars = [
     label: 'AGI',
   },
   {
+    name: 'v14',
+    label: 'Personal Exemptions',
+    neg: true,
+  },
+  {
+    name: 'v13',
+    label: 'Standard Deduction',
+    neg: true,
+  },
+  {
+    name: 'v17',
+    label: 'Itemized Deductions',
+    neg: true,
+  },
+  {
     name: 'v18',
     label: 'Taxable Income',
   },
@@ -26,6 +41,21 @@ const stateVars = [
   {
     name: 'v32',
     label: 'AGI',
+  },
+  {
+    name: 'v33',
+    label: 'Exemptions',
+    neg: true,
+  },
+  {
+    name: 'v34',
+    label: 'Standard Deduction',
+    neg: true,
+  },
+  {
+    name: 'v35',
+    label: 'Itemized Deductions',
+    neg: true,
   },
   {
     name: 'v36',
@@ -61,7 +91,7 @@ function varsToRows(vars) {
         attrs: {
           class: 'text-left col-span-2',
         },
-        if: `$output.${o.name} * 1 > 0`,
+        if: `$output.${o.name} * 1 != 0`,
         children: [
           {
             $el: 'span',
@@ -81,9 +111,10 @@ function varsToRows(vars) {
       },
       {
         $cmp: 'amount',
-        if: `$output.${o.name} * 1 > 0`,
+        if: `$output.${o.name} * 1 != 0`,
         props: {
           class: 'text-right col-start-3',
+          neg: o.neg,
         },
         children: `$output.${o.name}`,
       },
