@@ -450,6 +450,7 @@ const schemaCredits = creditOuts
       help: item.help,
       outerClass: 'col-span-2',
       if: `$addCredits || $visible.${item.name}`,
+      min: 0,
       max: item.max || MAX,
       step: STEP,
       delay: 0,
@@ -540,7 +541,6 @@ function filingStatus(input) {
 }
 
 async function recompute(input) {
-  var usedInputs = {}
   var url = new URL(window.location)
   for (let k in data) {
     let v = data[k]
@@ -549,10 +549,18 @@ async function recompute(input) {
       continue
     }
     url.searchParams.set(k, v)
-    usedInputs[k] = true
   }
   window.history.replaceState('', '', url)
-  visible.value = usedInputs
+  for (let o of incomeVars) {
+    if (addIncome.value && getParam(o.name)) {
+      visible.value = {...visible.value, [o.name]: true}
+    }
+  }
+  for (let o of creditsVars) {
+    if (addCredits.value && getParam(o.name)) {
+      visible.value = {...visible.value, [o.name]: true}
+    }
+  }
 
   let res = await taxsim({
     ...input,
