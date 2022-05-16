@@ -236,6 +236,10 @@ const schemaDemographics = [
     help: {
       if: '$get(year).value * 1 <= 2017',
       then: 'Affects personal exemption calculation',
+      else: {
+        if: '$get(year).value * 1 == 2021',
+        then: 'Affects Child Tax Credit',
+      }
     },
   },
   {
