@@ -1,5 +1,5 @@
 <script setup>
-import {ref, reactive, onErrorCaptured, toRaw} from 'vue'
+import {ref, reactive, computed, onErrorCaptured, toRaw} from 'vue'
 import states from './states.js'
 
 const federalIncomeVars = [
@@ -30,15 +30,10 @@ const federalIncomeVars = [
     if: '$output.v10 > 0 || true'
   }
 ]
-const federalTaxVars = [
+const federalCreditVars = [
   {
     name: 'v28',
     label: 'Income Tax',
-  },
-  {
-    name: 'tfica',
-    label: 'FICA Tax Withheld',
-    pos: true,
   },
   {
     name: 'v27',
@@ -76,6 +71,22 @@ const federalTaxVars = [
     neg: true,
   },
 ]
+const federalTaxVars = [
+  {
+    name: 'fiitax',
+    label: 'Income Tax Balance',
+    if: 'true || true',
+  },
+  {
+    name: 'tfica',
+    label: 'FICA Tax Withheld',
+    pos: true,
+  },
+  {
+    name: 'netftax',
+    label: 'Tax Due',
+  }
+]
 const stateIncomeVars = [
   {
     name: 'v32',
@@ -105,6 +116,36 @@ const stateIncomeVars = [
   },
 ]
 const stateTaxVars = [
+  {
+    name: 'stax',
+    label: 'Income Tax',
+    if: 'true || true',
+  },
+  {
+    name: 'v37',
+    label: 'Property Tax Credit',
+    neg: true,
+  },
+  {
+    name: 'v38',
+    label: 'Child Care Credit',
+    neg: true,
+  },
+  {
+    name: 'v39',
+    label: 'Earned Income Credit',
+    neg: true,
+  },
+  {
+    name: 'socredit',
+    label: 'Other Credits',
+    neg: true,
+    if: 'true || true'
+  },
+  {
+    name: 'siitax',
+    label: 'Tax Due',
+  }
 ]
 const schemaFederal = {
   $formkit: 'numeric',
@@ -171,14 +212,14 @@ const outputFederal = {
   attrs: {
     class: 'col-span-1 md:col-span-2 rounded-md p-2 border border-gray-200 h-fit text-center',
   },
-  if: '$output.fiitax',
+  if: '$output.netftax',
   children: [
     {
       $cmp: 'amount',
       props: {
         class: 'font-semibold',
       },
-      children: '$output.fiitax',
+      children: '$output.netftax',
     },
     {
       $el: 'p',
@@ -193,6 +234,13 @@ const outputFederal = {
         class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(federalIncomeVars),
+    },
+    {
+      $el: 'div',
+      attrs: {
+        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+      },
+      children: varsToRows(federalCreditVars),
     },
     {
       $el: 'div',
@@ -556,9 +604,9 @@ const schemaCredits = creditOuts
     },
   ])
 
-const output = ref({})
 const data = reactive({})
 const visible = ref({})
+const output = ref({})
 const addCredits = ref(false)
 const addIncome = ref(false)
 
@@ -647,6 +695,9 @@ async function recompute(input) {
   for (let [i, val] of vals.entries()) {
     out[keys[i]] = val
   }
+  out.netftax = parseFloat(out.fiitax) + parseFloat(out.tfica)
+  out.stax = parseFloat(out.siitax) + parseFloat(out.v40)
+  out.socredit = parseFloat(out.v40) - parseFloat(out.v37) - parseFloat(out.v38) - parseFloat(out.v39)
   output.value = out
   error.value = null
 }
