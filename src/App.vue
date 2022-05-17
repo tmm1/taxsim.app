@@ -76,7 +76,7 @@ const federalTaxVars = [
   {
     name: 'fiitax',
     label: 'Income Tax Balance',
-    if: 'true || true',
+    if: '$output.tfica * 1 >= 1',
   },
   {
     name: 'tfica',
@@ -121,7 +121,7 @@ const stateTaxVars = [
   {
     name: 'stax',
     label: 'Income Tax',
-    if: 'true || true',
+    if: '$output.stax != $output.siitax',
   },
   {
     name: 'v37',
