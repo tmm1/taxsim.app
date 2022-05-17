@@ -1,5 +1,5 @@
 <script setup>
-import {ref, reactive, computed, onErrorCaptured, toRaw} from 'vue'
+import {ref, reactive, onErrorCaptured} from 'vue'
 import states from './states.js'
 
 const federalIncomeVars = [
@@ -213,7 +213,6 @@ const outputFederal = {
   attrs: {
     class: 'col-span-1 md:col-span-2 rounded-md p-2 border border-gray-200 h-fit text-center',
   },
-  if: '$output.netftax',
   children: [
     {
       $cmp: 'amount',

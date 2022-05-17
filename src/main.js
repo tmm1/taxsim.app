@@ -14,7 +14,7 @@ const nformat = Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 }).format
 
-let amount = (props, {slots}) => {
+let amount = ({prefix, ...props}, {slots}) => {
   let n = parseInt(slots.default()[0].children)
   if (props.prefix == '-') n *= -1
   let out = nformat(n)
