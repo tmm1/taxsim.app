@@ -497,7 +497,7 @@ const schemaIncome = incomeVars
       $el: 'button',
       attrs: {
         class:
-          'block p-2 px-4 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
+          'block p-2 px-4 mb-6 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
         onClick: '$toggleAddIncome',
       },
       children: {
@@ -601,7 +601,7 @@ const schemaCredits = creditOuts
       $el: 'button',
       attrs: {
         class:
-          'block p-2 px-4 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
+          'block p-2 px-4 mb-6 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
         onClick: '$toggleAddCredits',
       },
       children: {
