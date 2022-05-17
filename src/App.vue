@@ -200,7 +200,7 @@ function varsToRows(vars) {
         $cmp: 'amount',
         if: [`$output.${o.name} * 1 >= 1`, o.if].filter(o => !!o).join(' && '),
         props: {
-          class: 'text-right col-start-3',
+          class: 'text-right col-start-3 h-100 self-center',
           prefix: o.neg ? '-' : o.pos ? '+' : (o.prefix || ''),
         },
         children: `$output.${o.name}`,
