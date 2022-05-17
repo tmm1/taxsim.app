@@ -176,7 +176,7 @@ function varsToRows(vars) {
       {
         $el: 'div',
         attrs: {
-          class: 'text-left col-span-2',
+          class: 'text-left col-span-2 leading-none',
         },
         if: [o.if, `$output.${o.name} * 1 >= 1`].filter(o => !!o).join(' && '),
         children: [
@@ -200,7 +200,7 @@ function varsToRows(vars) {
         $cmp: 'amount',
         if: [o.if, `$output.${o.name} * 1 >= 1`].filter(o => !!o).join(' && '),
         props: {
-          class: 'text-right col-start-3 h-100 self-center',
+          class: 'text-right col-start-3 h-100 self-center leading-none',
           prefix: o.neg ? '-' : o.pos ? '+' : o.prefix || '',
         },
         children: `$output.${o.name}`,
@@ -233,7 +233,7 @@ const outputFederal = {
       $el: 'div',
       attrs: {
         class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(federalIncomeVars),
     },
@@ -241,7 +241,7 @@ const outputFederal = {
       $el: 'div',
       attrs: {
         class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(federalCreditVars),
     },
@@ -249,7 +249,7 @@ const outputFederal = {
       $el: 'div',
       attrs: {
         class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(federalTaxVars),
     },
@@ -280,7 +280,7 @@ const outputState = {
       $el: 'div',
       attrs: {
         class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(stateIncomeVars),
     },
@@ -288,7 +288,7 @@ const outputState = {
       $el: 'div',
       attrs: {
         class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(stateTaxVars),
     },
