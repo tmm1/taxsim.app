@@ -599,7 +599,7 @@ const schemaCredits = creditOuts
     },
   ])
 
-const data = reactive({})
+const data = ref({})
 const visible = ref({})
 const output = ref({})
 const addCredits = ref(false)
@@ -623,7 +623,7 @@ const schemaData = reactive({
     addCredits.value = !addCredits.value
   },
   filingStatusInfo: () => {
-    switch (data.mstat) {
+    switch (data.value.mstat) {
       case 'dependent':
         return 'Typically a child with income'
       default:
@@ -655,8 +655,8 @@ function filingStatus(input) {
 
 async function recompute(input) {
   var url = new URL(window.location)
-  for (let k in data) {
-    let v = data[k]
+  for (let k in data.value) {
+    let v = data.value[k]
     if (v === undefined || v == 0 || v == '0') {
       url.searchParams.delete(k)
       continue
