@@ -414,12 +414,18 @@ const incomeVars = [
     name: 'pwages',
     spouse: 'swages',
     label: 'Wages and Salaries',
-    help: /*html*/ `
-    <div class="font-semibold mb-0.5">Wages, salaries, and tips are reported to you on <a href="https://en.wikipedia.org/wiki/Form_W-2">Form W‑2.</a></div>
-    Employers and employees split payroll taxes as per <a href="https://en.wikipedia.org/wiki/Federal_Insurance_Contributions_Act_tax">FICA</a> to
+    help: {
+      $el: 'div',
+      attrs: {
+        innerHTML: /*html*/ `
+    <div class="font-semibold mb-0.5">Wages, salaries, and tips are reported to you on <a href="https://en.wikipedia.org/wiki/Form_W-2">Form W‑2</a>.</div>
+    Employers and employees split payroll taxes as per <a href="https://en.wikipedia.org/wiki/Federal_Insurance_Contributions_Act_tax">FICA</a>, to
     fund <a href="https://en.wikipedia.org/wiki/Medicare_(United_States)">Medicare</a> and <a href="https://en.wikipedia.org/wiki/Social_Security_(United_States)">Social Security</a>.
-    Payroll taxes are <a href="https://www.irs.gov/individuals/employees/tax-withholding">withheld by your employer</a> and paid directly to the IRS in your name.
-    You may adjust how much tax is withheld by filing <a href="https://en.wikipedia.org/wiki/Form_W-4">Form W-4</a> with your employer.`,
+    Your portion of the payroll tax is <a href="https://www.irs.gov/individuals/employees/tax-withholding">withheld by your employer</a> and paid directly to the IRS in your name.
+    You may adjust how much tax is withheld by filing <a href="https://en.wikipedia.org/wiki/Form_W-4">Form W-4</a> with your employer.
+    `,
+      },
+    },
   },
   {
     name: 'psemp',
@@ -473,20 +479,16 @@ const schemaIncome = incomeVars
     delay: 0,
     value: getParam(item.name) || 0,
     sectionsSchema: {
-      help: {
-        $el: 'div',
-        attrs: {
-          class: 'text-xs font-normal text-gray-500 mt-1 mb-2 leading-tight pt-2 px-3 border-t border-gray-100',
-        },
-        children: [
-          {
+      help: item.help
+        ? {
             $el: 'div',
+            if: '$help',
             attrs: {
-              innerHTML: item.help,
+              class: 'text-xs font-normal text-gray-500 mt-1 mb-2 leading-tight pt-2 px-3 border-t border-gray-100',
             },
-          },
-        ],
-      },
+            children: [item.help],
+          }
+        : undefined,
       label: {
         children: [
           '$label',
