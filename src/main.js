@@ -19,8 +19,17 @@ let amount = ({prefix, ...props}, {slots}) => {
   if (prefix == '-') n *= -1
   let out = nformat(n)
   if (out == '$NaN') out = '$0'
-  if (prefix != '-') out = (prefix || '') + out
-  return h('span', props, out.replace(/-/g, '‑'))
+  out = out.replace(/-/g, '‑')
+  switch (prefix) {
+    case '-':
+      break
+    case '=':
+      out = '=' + String.fromCharCode(160) + out
+      break
+    default:
+      out = (prefix || '') + out
+  }
+  return h('span', props, out)
 }
 amount.props = ['prefix']
 

@@ -28,6 +28,7 @@ const federalIncomeVars = [
     name: 'v18',
     label: 'Taxable Income',
     if: '$output.v10 > 0 || true',
+    prefix: '=',
   },
 ]
 const federalCreditVars = [
@@ -115,6 +116,7 @@ const stateIncomeVars = [
     name: 'v36',
     label: 'Taxable Income',
     if: '$output.v32 >= 1 || true',
+    prefix: '=',
   },
 ]
 const stateTaxVars = [
