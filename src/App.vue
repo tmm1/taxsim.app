@@ -748,7 +748,7 @@ onErrorCaptured(err => {
           <pre class="data">{{ data }}</pre>
 
           <h2>Output</h2>
-          <pre class="data">{{ output }}</pre>
+          <pre class="data" v-if="output">{{ output }}</pre>
         </div>
       </main>
     </div>
@@ -756,6 +756,9 @@ onErrorCaptured(err => {
 </template>
 
 <style lang="postcss">
+main {
+  @apply bg-white;
+}
 .footer a {
   @apply decoration-slate-300 underline;
 }
