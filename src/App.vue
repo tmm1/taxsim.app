@@ -10,19 +10,19 @@ const federalIncomeVars = [
   {
     name: 'v14',
     label: 'Personal Exemptions',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v13',
     label: 'Standard Deduction',
     if: '$output.v10 > 0',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v17',
     label: 'Itemized Deductions',
     if: '$output.v10 > 0',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v18',
@@ -40,37 +40,37 @@ const federalCreditVars = [
   {
     name: 'v27',
     label: 'AMT',
-    pos: true,
+    prefix: '+',
   },
   {
     name: 'v43',
     label: 'NIIT',
-    pos: true,
+    prefix: '+',
   },
   {
     name: 'v21',
     label: 'General Tax Credit',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v23',
     label: 'Child Tax Credit',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v24',
     label: 'Child Care Credit',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v25',
     label: 'Earned Income Credit',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v45',
     label: 'CARES Recovery Rebate',
-    neg: true,
+    prefix: '-',
   },
 ]
 const federalTaxVars = [
@@ -82,7 +82,7 @@ const federalTaxVars = [
   {
     name: 'tfica',
     label: 'FICA Tax Withheld',
-    pos: true,
+    prefix: '+',
   },
   {
     name: 'netftax',
@@ -98,19 +98,19 @@ const stateIncomeVars = [
   {
     name: 'v33',
     label: 'Exemptions',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v34',
     label: 'Standard Deduction',
     if: '$output.v34 > $output.v35 && $output.v32 >= 1',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v35',
     label: 'Itemized Deductions',
     if: '$output.v35 > $output.v34 && $output.v32 >= 1',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v36',
@@ -128,22 +128,22 @@ const stateTaxVars = [
   {
     name: 'v37',
     label: 'Property Tax Credit',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v38',
     label: 'Child Care Credit',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'v39',
     label: 'Earned Income Credit',
-    neg: true,
+    prefix: '-',
   },
   {
     name: 'socredit',
     label: 'Other Credits',
-    neg: true,
+    prefix: '-',
     if: 'true || true',
   },
   {
@@ -194,7 +194,7 @@ function varsToRows(vars) {
         if: [o.if, `$output.${o.name} * 1 >= 1`].filter(o => !!o).join(' && '),
         props: {
           class: 'text-right col-start-2 h-100 self-center leading-none',
-          prefix: o.neg ? '-' : o.pos ? '+' : o.prefix || '',
+          prefix: o.prefix,
         },
         children: `$output.${o.name}`,
       },
