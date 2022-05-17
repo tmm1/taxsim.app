@@ -34,6 +34,7 @@ const federalCreditVars = [
   {
     name: 'v28',
     label: 'Income Tax',
+    if: '$output.v28 != $output.fiitax',
   },
   {
     name: 'v27',
