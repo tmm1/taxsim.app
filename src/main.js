@@ -16,10 +16,10 @@ const nformat = Intl.NumberFormat('en-US', {
 
 let amount = ({prefix, ...props}, {slots}) => {
   let n = parseInt(slots.default()[0].children)
-  if (props.prefix == '-') n *= -1
+  if (prefix == '-') n *= -1
   let out = nformat(n)
   if (out == '$NaN') out = '$0'
-  if (props.prefix != '-') out = (props.prefix || '') + out
+  if (prefix != '-') out = (prefix || '') + out
   return h('span', props, out.replace(/-/g, '‑'))
 }
 amount.props = ['prefix']
