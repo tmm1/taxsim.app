@@ -178,7 +178,7 @@ function varsToRows(vars) {
         attrs: {
           class: 'text-left col-span-2',
         },
-        if: [`$output.${o.name} * 1 >= 1`, o.if].filter(o => !!o).join(' && '),
+        if: [o.if, `$output.${o.name} * 1 >= 1`].filter(o => !!o).join(' && '),
         children: [
           {
             $el: 'span',
@@ -198,7 +198,7 @@ function varsToRows(vars) {
       },
       {
         $cmp: 'amount',
-        if: [`$output.${o.name} * 1 >= 1`, o.if].filter(o => !!o).join(' && '),
+        if: [o.if, `$output.${o.name} * 1 >= 1`].filter(o => !!o).join(' && '),
         props: {
           class: 'text-right col-start-3 h-100 self-center',
           prefix: o.neg ? '-' : o.pos ? '+' : o.prefix || '',
