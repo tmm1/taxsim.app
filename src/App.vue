@@ -86,7 +86,7 @@ const federalTaxVars = [
   {
     name: 'netftax',
     label: 'Net Tax',
-    prefix: '= ',
+    prefix: '=',
   },
 ]
 const stateIncomeVars = [
@@ -147,7 +147,7 @@ const stateTaxVars = [
   {
     name: 'siitax',
     label: 'Net Tax',
-    prefix: '= ',
+    prefix: '=',
   },
 ]
 const schemaFederal = {
