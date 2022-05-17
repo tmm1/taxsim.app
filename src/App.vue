@@ -497,7 +497,7 @@ const schemaIncome = incomeVars
       },
       children: {
         if: '$addIncome',
-        then: ['Save'],
+        then: ['Done'],
         else: ['+ ', ' Add'],
       },
     },
@@ -601,7 +601,7 @@ const schemaCredits = creditOuts
       },
       children: {
         if: '$addCredits',
-        then: ['Save'],
+        then: ['Done'],
         else: ['+ ', ' Add'],
       },
     },
