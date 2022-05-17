@@ -232,24 +232,21 @@ const outputFederal = {
     {
       $el: 'div',
       attrs: {
-        class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
+        class: 'summary',
       },
       children: varsToRows(federalIncomeVars),
     },
     {
       $el: 'div',
       attrs: {
-        class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
+        class: 'summary',
       },
       children: varsToRows(federalCreditVars),
     },
     {
       $el: 'div',
       attrs: {
-        class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
+        class: 'summary',
       },
       children: varsToRows(federalTaxVars),
     },
@@ -279,16 +276,14 @@ const outputState = {
     {
       $el: 'div',
       attrs: {
-        class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
+        class: 'summary',
       },
       children: varsToRows(stateIncomeVars),
     },
     {
       $el: 'div',
       attrs: {
-        class:
-          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden',
+        class: 'summary',
       },
       children: varsToRows(stateTaxVars),
     },
@@ -776,6 +771,9 @@ pre.data {
   @apply font-mono mx-10 my-4;
   font-size: 10pt;
   overflow-x: auto;
+}
+.summary {
+  @apply border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden;
 }
 .input-numeric,
 .input-amount {
