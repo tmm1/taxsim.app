@@ -20,7 +20,7 @@ let amount = (props, {slots}) => {
   let out = nformat(n)
   if (out == '$NaN') out = '$0'
   if (props.prefix != '-') out = (props.prefix || '') + out
-  return h('span', props, out)
+  return h('span', props, out.replace(/-/g, '‑'))
 }
 amount.props = ['prefix']
 
