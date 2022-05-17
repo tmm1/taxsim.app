@@ -177,22 +177,12 @@ function varsToRows(vars) {
       {
         $el: 'div',
         attrs: {
-          class: 'text-left col-span-2 leading-none',
+          class: 'text-left col-span-1 leading-none',
         },
         if: [o.if, `$output.${o.name} * 1 >= 1`].filter(o => !!o).join(' && '),
         children: [
           {
             $el: 'span',
-            attrs: {
-              class: 'hidden',
-            },
-            children: o.label,
-          },
-          {
-            $el: 'span',
-            attrs: {
-              class: '',
-            },
             children: o.label,
           },
         ],
@@ -201,7 +191,7 @@ function varsToRows(vars) {
         $cmp: 'amount',
         if: [o.if, `$output.${o.name} * 1 >= 1`].filter(o => !!o).join(' && '),
         props: {
-          class: 'text-right col-start-3 h-100 self-center leading-none',
+          class: 'text-right col-start-2 h-100 self-center leading-none',
           prefix: o.neg ? '-' : o.pos ? '+' : o.prefix || '',
         },
         children: `$output.${o.name}`,
@@ -773,7 +763,7 @@ pre.data {
   overflow-x: auto;
 }
 .summary {
-  @apply border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden;
+  @apply border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-2 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden;
 }
 .input-numeric,
 .input-amount {
