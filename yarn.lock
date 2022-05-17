@@ -20,10 +20,8 @@
     escape-string-regexp "^4.0.0"
     rollup-plugin-node-polyfills "^0.2.1"
 
-"@formkit/core@1.0.0-beta.8":
+"@formkit/core@../formkit/packages/core", "@formkit/core@1.0.0-beta.8":
   version "1.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@formkit/core/-/core-1.0.0-beta.8.tgz#51d789fe8630adc16149e81336b976ef652d2931"
-  integrity sha512-oHOfdKM0DX4gwxdzwdYHjmb02v62A/zR+eVVhGLes14ObhGvW9HD1mQqUgMZRKB5mEvgu6262v0nTcXZTFlEPQ==
   dependencies:
     "@formkit/utils" "1.0.0-beta.8"
 

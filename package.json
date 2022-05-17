@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@formkit/core": "../formkit/packages/core",
     "@formkit/themes": "^1.0.0-beta.8",
     "@formkit/vue": "^1.0.0-beta.8",
     "vue": "^3.2.33"
