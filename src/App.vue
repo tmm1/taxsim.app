@@ -84,7 +84,8 @@ const federalTaxVars = [
   },
   {
     name: 'netftax',
-    label: 'Tax Due',
+    label: 'Net Tax',
+    prefix: '= ',
   }
 ]
 const stateIncomeVars = [
@@ -144,7 +145,8 @@ const stateTaxVars = [
   },
   {
     name: 'siitax',
-    label: 'Tax Due',
+    label: 'Net Tax',
+    prefix: '= ',
   }
 ]
 const schemaFederal = {
@@ -199,8 +201,7 @@ function varsToRows(vars) {
         if: [`$output.${o.name} * 1 >= 1`, o.if].filter(o => !!o).join(' && '),
         props: {
           class: 'text-right col-start-3',
-          neg: o.neg,
-          pos: o.pos,
+          prefix: o.neg ? '-' : o.pos ? '+' : (o.prefix || ''),
         },
         children: `$output.${o.name}`,
       },

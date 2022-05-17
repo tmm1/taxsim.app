@@ -16,13 +16,13 @@ const nformat = Intl.NumberFormat('en-US', {
 
 let amount = (props, {slots}) => {
   let n = parseInt(slots.default()[0].children)
-  if (props.neg) n *= -1
+  if (props.prefix == '-') n *= -1
   let out = nformat(n)
   if (out == '$NaN') out = '$0'
-  if (props.pos) out = '+' + out
+  if (props.prefix != '-') out = props.prefix + out
   return h('span', props, out)
 }
-amount.props = ['neg', 'pos']
+amount.props = ['prefix']
 
 createApp(App)
   .component('amount', amount)
