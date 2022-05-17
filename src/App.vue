@@ -27,8 +27,8 @@ const federalIncomeVars = [
   {
     name: 'v18',
     label: 'Taxable Income',
-    if: '$output.v10 > 0 || true'
-  }
+    if: '$output.v10 > 0 || true',
+  },
 ]
 const federalCreditVars = [
   {
@@ -86,7 +86,7 @@ const federalTaxVars = [
     name: 'netftax',
     label: 'Net Tax',
     prefix: '= ',
-  }
+  },
 ]
 const stateIncomeVars = [
   {
@@ -113,7 +113,7 @@ const stateIncomeVars = [
   {
     name: 'v36',
     label: 'Taxable Income',
-    if: '$output.v32 >= 1 || true'
+    if: '$output.v32 >= 1 || true',
   },
 ]
 const stateTaxVars = [
@@ -141,13 +141,13 @@ const stateTaxVars = [
     name: 'socredit',
     label: 'Other Credits',
     neg: true,
-    if: 'true || true'
+    if: 'true || true',
   },
   {
     name: 'siitax',
     label: 'Net Tax',
     prefix: '= ',
-  }
+  },
 ]
 const schemaFederal = {
   $formkit: 'numeric',
@@ -201,7 +201,7 @@ function varsToRows(vars) {
         if: [`$output.${o.name} * 1 >= 1`, o.if].filter(o => !!o).join(' && '),
         props: {
           class: 'text-right col-start-3 h-100 self-center',
-          prefix: o.neg ? '-' : o.pos ? '+' : (o.prefix || ''),
+          prefix: o.neg ? '-' : o.pos ? '+' : o.prefix || '',
         },
         children: `$output.${o.name}`,
       },
@@ -232,21 +232,24 @@ const outputFederal = {
     {
       $el: 'div',
       attrs: {
-        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+        class:
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(federalIncomeVars),
     },
     {
       $el: 'div',
       attrs: {
-        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+        class:
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(federalCreditVars),
     },
     {
       $el: 'div',
       attrs: {
-        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+        class:
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(federalTaxVars),
     },
@@ -276,14 +279,16 @@ const outputState = {
     {
       $el: 'div',
       attrs: {
-        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+        class:
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(stateIncomeVars),
     },
     {
       $el: 'div',
       attrs: {
-        class: 'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
+        class:
+          'border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-3 gap-x-1 gap-y-0.5 text-xs text-gray-500 empty:hidden',
       },
       children: varsToRows(stateTaxVars),
     },
@@ -345,8 +350,8 @@ const schemaDemographics = [
       else: {
         if: '$get(year).value * 1 >= 2018',
         then: 'Affects child tax credit',
-        else: ''
-      }
+        else: '',
+      },
     },
   },
   {
@@ -373,7 +378,7 @@ const schemaDemographics = [
             if: '$get(year).value * 1 >= 2018',
             then: 'Affects EITC and CTC',
             else: 'Affects EITC',
-          }
+          },
         },
       },
       {
@@ -465,7 +470,7 @@ const schemaIncome = incomeVars
     id: item.name,
     name: item.name,
     label: item.label,
-    outerClass: "col-span-2",
+    outerClass: 'col-span-2',
     if: `$addIncome || $visible.${item.name}`,
     min: item.type == 'gainorloss' ? -MAX : 0,
     max: item.max || MAX,
@@ -491,14 +496,15 @@ const schemaIncome = incomeVars
     {
       $el: 'button',
       attrs: {
-        class: 'block p-2 px-4 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
+        class:
+          'block p-2 px-4 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
         onClick: '$toggleAddIncome',
       },
       children: {
         if: '$addIncome',
         then: ['Save'],
         else: ['+ ', ' Add'],
-      }
+      },
     },
   ])
 
@@ -594,14 +600,15 @@ const schemaCredits = creditOuts
     {
       $el: 'button',
       attrs: {
-        class: 'block p-2 px-4 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
+        class:
+          'block p-2 px-4 rounded-full border border-gray-200 text-sm text-center mx-auto font-medium bg-gray-100 hover:text-blue-700',
         onClick: '$toggleAddCredits',
       },
       children: {
         if: '$addCredits',
         then: ['Save'],
         else: ['+ ', ' Add'],
-      }
+      },
     },
   ])
 
