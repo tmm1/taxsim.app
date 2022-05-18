@@ -409,23 +409,59 @@ const schemaDemographics = [
   },
 ]
 
+function aHref(text, href) {
+  return {
+    $el: 'a',
+    attrs: {
+      href,
+    },
+    children: text,
+  }
+}
+
 const incomeVars = [
   {
     name: 'pwages',
     spouse: 'swages',
     label: 'Wages and Salaries',
-    help: {
-      $el: 'div',
-      attrs: {
-        innerHTML: /*html*/ `
-    <div class="font-semibold mb-0.5">Wages, salaries, and tips are reported to you on <a href="https://en.wikipedia.org/wiki/Form_W-2">Form W‑2</a>.</div>
-    Employers and employees split payroll taxes as per <a href="https://en.wikipedia.org/wiki/Federal_Insurance_Contributions_Act_tax">FICA</a>, to
-    fund <a href="https://en.wikipedia.org/wiki/Medicare_(United_States)">Medicare</a> and <a href="https://en.wikipedia.org/wiki/Social_Security_(United_States)">Social Security</a>.
-    Your portion of the payroll tax is <a href="https://www.irs.gov/individuals/employees/tax-withholding">withheld by your employer</a> and paid directly to the IRS in your name.
-    You may adjust how much tax is withheld by filing <a href="https://en.wikipedia.org/wiki/Form_W-4">Form W-4</a> with your employer.
-    `,
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `Wages, salaries, and tips are reported to you on <a href="https://en.wikipedia.org/wiki/Form_W-2">Form W‑2</a>.`,
+        },
       },
-    },
+      {
+        $el: 'div',
+        children: [
+          `Employers and employees split payroll taxes as per `,
+          aHref('FICA', 'https://en.wikipedia.org/wiki/Federal_Insurance_Contributions_Act_tax'),
+          `, to fund `,
+          aHref('Medicare', 'https://en.wikipedia.org/wiki/Medicare_(United_States)'),
+          ` and `,
+          aHref('Social Security', 'https://en.wikipedia.org/wiki/Social_Security_(United_States)'),
+          `. Your portion of the payroll tax`,
+          {
+            $el: 'span',
+            if: '$help.tfica * 1 >= 1',
+            children: [
+              ' (',
+              {
+                $cmp: 'amount',
+                children: '$help.tfica',
+              },
+              ')',
+            ],
+          },
+          ` is `,
+          aHref('withheld from your paycheck', 'https://www.irs.gov/individuals/employees/tax-withholding'),
+          ` and paid directly to the IRS in your name. You may adjust how much tax is withheld by submitting `,
+          aHref('Form W-4', 'https://en.wikipedia.org/wiki/Form_W-4'),
+          ` to your employer.`,
+        ],
+      },
+    ],
   },
   {
     name: 'psemp',
@@ -470,7 +506,7 @@ const schemaIncome = incomeVars
     name: item.name,
     key: item.name,
     label: item.label,
-    help: item.help,
+    help: '$output',
     outerClass: 'col-span-2',
     if: `$addIncome || $visible.${item.name}`,
     min: item.type == 'gainorloss' ? -MAX : 0,
@@ -486,9 +522,12 @@ const schemaIncome = incomeVars
             attrs: {
               class: 'text-xs font-normal text-gray-500 mt-1 mb-2 leading-tight pt-2 px-3 border-t border-gray-100',
             },
-            children: [item.help],
+            children: item.help,
           }
-        : undefined,
+        : {
+            $el: null,
+            children: [],
+          },
       label: {
         children: [
           '$label',
