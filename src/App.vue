@@ -574,6 +574,15 @@ const creditOuts = [
   {
     name: 'v45',
     label: 'CARES Recovery Rebate',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `The <a href="https://en.wikipedia.org/wiki/CARES_Act">CARES Act</a> provided economic stimulus rebates to all US taxpayers.`,
+        },
+      },
+    ],
   },
   {
     name: 'v21',
@@ -598,6 +607,21 @@ const creditOuts = [
   {
     name: 'v13',
     label: 'Standard Deduction',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `Income below the <a href="https://en.wikipedia.org/wiki/Standard_deduction">Standard Deduction</a> amount is tax free.`,
+        },
+      },
+      {
+        $el: 'div',
+        children: [
+          'The standard deduction amount varies based on filing status and other demographic factors, and increases year-by-year based on inflation. You may elect to itemize your deductions if they add up to more than the standard amount.',
+        ],
+      },
+    ],
   },
 ]
 const schemaCredits = creditOuts
@@ -605,18 +629,35 @@ const schemaCredits = creditOuts
     $el: 'div',
     if: `$output.${o.name} * 1 > 0`,
     attrs: {
-      class: 'col-span-2 font-bold text-sm rounded-md p-4 border border-gray-200 mb-4',
+      class: 'credit-out col-span-2 font-bold text-sm rounded-md border border-gray-200 mb-4 py-3',
     },
     children: [
-      o.label,
       {
-        $cmp: 'amount',
-        props: {
-          class: 'float-right',
+        $el: 'div',
+        attrs: {
+          class: 'px-3',
         },
-        children: `$output.${o.name}`,
+        children: [
+          o.label,
+          {
+            $cmp: 'amount',
+            props: {
+              class: 'float-right',
+            },
+            children: `$output.${o.name}`,
+          },
+        ],
       },
-    ],
+      o.help
+        ? {
+            $el: 'div',
+            attrs: {
+              class: 'text-xs font-normal text-gray-500 mt-2 leading-tight pt-2 px-3 border-t border-gray-100',
+            },
+            children: o.help,
+          }
+        : null,
+    ].filter(o => !!o),
   }))
   .concat(
     creditsVars.map(item => ({
@@ -828,6 +869,7 @@ onErrorCaptured(err => {
 main {
   @apply bg-white;
 }
+.credit-out a,
 .formkit-outer[data-type='amount'] a,
 .footer a {
   @apply decoration-slate-300 underline;
