@@ -722,6 +722,7 @@ const schemaCredits = creditOuts
 
 const data = ref({})
 const visible = ref({})
+const debug = ref(!!getParam('debug'))
 const output = ref({})
 const addCredits = ref(false)
 const addIncome = ref(false)
@@ -855,7 +856,7 @@ onErrorCaptured(err => {
             <FormKitSchema :schema="schemaIncome" :data="schemaData" />
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="false">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="debug">
           <div>
             <heading>Debug Input</heading>
             <pre class="data">{{ data }}</pre>
