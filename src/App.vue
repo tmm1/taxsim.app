@@ -142,9 +142,28 @@ const stateTaxVars = [
   },
   {
     name: 'socredit',
-    label: 'Other Credits',
+    label: [
+      {
+        $cmp: 'popper',
+        props: {
+          hover: true,
+          arrow: true,
+          placement: 'right',
+          content: 'Fuel Credit, Low Income Credit, etc',
+        },
+        children: [
+          {
+            $el: 'span',
+            attrs: {
+              class: 'border-b border-dashed',
+            },
+            children: 'Other Credits',
+          },
+        ],
+      },
+    ],
     prefix: '-',
-    if: 'true || true',
+    onlyIf: 'true',
   },
   {
     name: 'siitax',
@@ -185,12 +204,7 @@ function varsToRows(vars) {
             class: 'text-left col-span-1 leading-none',
           },
           if: condition,
-          children: [
-            {
-              $el: 'span',
-              children: o.label,
-            },
-          ],
+          children: o.label,
         },
         {
           $cmp: 'amount',
@@ -921,5 +935,16 @@ pre.data {
   .formkit-suffix:hover {
     @apply text-blue-700;
   }
+}
+:root {
+  --popper-theme-background-color: #444;
+  --popper-theme-text-color: #ffffff;
+  --popper-theme-border-width: 0px;
+  --popper-theme-border-style: solid;
+  --popper-theme-border-radius: 0.5rem;
+  --popper-theme-padding: 0.5rem;
+}
+main .popper {
+  @apply text-[0.65rem];
 }
 </style>

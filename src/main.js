@@ -1,8 +1,10 @@
 import {createApp, h} from 'vue'
-import App from './App.vue'
-import heading from './heading.vue'
+import Popper from 'vue3-popper'
 import {plugin, defaultConfig} from '@formkit/vue'
 import {generateClasses} from '@formkit/themes'
+
+import App from './App.vue'
+import heading from './heading.vue'
 import theme from './theme.js'
 import numericInput from './numeric.js'
 import amountInput from './amount.js'
@@ -36,6 +38,7 @@ amount.props = ['prefix']
 createApp(App)
   .component('amount', amount)
   .component('heading', heading)
+  .component('popper', Popper)
   .use(
     plugin,
     defaultConfig({
