@@ -121,11 +121,6 @@ const stateIncomeVars = [
 ]
 const stateTaxVars = [
   {
-    name: 'stax',
-    label: 'Income Tax',
-    if: '$output.stax != $output.siitax',
-  },
-  {
     name: 'v37',
     label: 'Property Tax Credit',
     prefix: '-',
@@ -822,7 +817,6 @@ async function recompute(input) {
     out[keys[i]] = parseFloat(val)
   }
   out.netftax = out.fiitax + out.tfica
-  out.stax = out.siitax + out.v40
   out.socredit = out.v40 - out.v37 - out.v38 - out.v39
   output.value = out
   error.value = null
