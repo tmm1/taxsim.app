@@ -593,7 +593,7 @@ const creditOuts = [
         $el: 'div',
         attrs: {
           class: 'font-semibold mb-0.5',
-          innerHTML: /*html*/ `The <a href="https://en.wikipedia.org/wiki/CARES_Act">CARES Act</a> provided economic stimulus rebates to all US taxpayers.`,
+          innerHTML: /*html*/ `The <a href="https://en.wikipedia.org/wiki/CARES_Act">CARES Act</a> provides economic stimulus rebates to all US taxpayers.`,
         },
       },
     ],
@@ -613,6 +613,15 @@ const creditOuts = [
   {
     name: 'v25',
     label: 'Earned Income Credit',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `The <a href="https://en.wikipedia.org/wiki/Earned_income_tax_credit">EITC</a> provides tax rebates for low- to moderate-income working individuals and couples, particularly those with children.`,
+        },
+      },
+    ],
   },
   {
     name: 'v14',
