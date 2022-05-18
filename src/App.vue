@@ -810,11 +810,11 @@ async function recompute(input) {
   let vals = lines[1].split(',')
   let out = {}
   for (let [i, val] of vals.entries()) {
-    out[keys[i]] = val
+    out[keys[i]] = parseFloat(val)
   }
-  out.netftax = parseFloat(out.fiitax) + parseFloat(out.tfica)
-  out.stax = parseFloat(out.siitax) + parseFloat(out.v40)
-  out.socredit = parseFloat(out.v40) - parseFloat(out.v37) - parseFloat(out.v38) - parseFloat(out.v39)
+  out.netftax = out.fiitax + out.tfica
+  out.stax = out.siitax + out.v40
+  out.socredit = out.v40 - out.v37 - out.v38 - out.v39
   output.value = out
   error.value = null
 }
