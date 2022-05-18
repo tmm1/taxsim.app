@@ -27,7 +27,7 @@ const federalIncomeVars = [
   {
     name: 'v18',
     label: 'Taxable Income',
-    if: '$output.v10 > 0 || true',
+    onlyIf: '$output.v10 > 0',
     prefix: '=',
   },
 ]
@@ -77,7 +77,7 @@ const federalTaxVars = [
   {
     name: 'fiitax',
     label: 'Income Tax Balance',
-    if: '$output.tfica * 1 >= 1',
+    if: '$output.tfica * 1 >= 1 || true',
   },
   {
     name: 'tfica',
@@ -115,7 +115,7 @@ const stateIncomeVars = [
   {
     name: 'v36',
     label: 'Taxable Income',
-    if: '$output.v32 >= 1 || true',
+    onlyIf: '$output.v32 * 1 >= 1',
     prefix: '=',
   },
 ]
@@ -175,30 +175,34 @@ const schemaState = {
 }
 function varsToRows(vars) {
   return vars
-    .map(o => [
-      {
-        $el: 'div',
-        attrs: {
-          class: 'text-left col-span-1 leading-none',
-        },
-        if: [o.if, `$output.${o.name} * 1 >= 1`].filter(o => !!o).join(' && '),
-        children: [
-          {
-            $el: 'span',
-            children: o.label,
+    .map(o => {
+      let condition =
+        o.onlyIf || [o.if, `($output.${o.name} * 1 >= 1 || $output.${o.name} * 1 <= -1)`].filter(o => !!o).join(' && ')
+      return [
+        {
+          $el: 'div',
+          attrs: {
+            class: 'text-left col-span-1 leading-none',
           },
-        ],
-      },
-      {
-        $cmp: 'amount',
-        if: [o.if, `$output.${o.name} * 1 >= 1`].filter(o => !!o).join(' && '),
-        props: {
-          class: 'text-right col-start-2 h-100 self-center leading-none',
-          prefix: o.prefix,
+          if: condition,
+          children: [
+            {
+              $el: 'span',
+              children: o.label,
+            },
+          ],
         },
-        children: `$output.${o.name}`,
-      },
-    ])
+        {
+          $cmp: 'amount',
+          if: condition,
+          props: {
+            class: 'text-right col-start-2 h-100 self-center leading-none',
+            prefix: o.prefix,
+          },
+          children: `$output.${o.name}`,
+        },
+      ]
+    })
     .flat()
 }
 const outputFederal = {
