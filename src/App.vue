@@ -82,11 +82,7 @@ const federalTaxVars = [
   {
     name: 'tfica',
     label: 'FICA Tax Withheld',
-    prefix: {
-      if: '$output.fiitax * 1 < 0',
-      then: '',
-      else: '+'
-    }
+    prefix: '+',
   },
   {
     name: 'netftax',
@@ -762,8 +758,7 @@ async function recompute(input) {
   for (let [i, val] of vals.entries()) {
     out[keys[i]] = val
   }
-  out.netftax = parseFloat(out.fiitax)
-  if (out.netftax >= 0) out.netftax += parseFloat(out.tfica)
+  out.netftax = parseFloat(out.fiitax) + parseFloat(out.tfica)
   out.stax = parseFloat(out.siitax) + parseFloat(out.v40)
   out.socredit = parseFloat(out.v40) - parseFloat(out.v37) - parseFloat(out.v38) - parseFloat(out.v39)
   output.value = out
