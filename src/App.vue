@@ -802,12 +802,15 @@ onErrorCaptured(err => {
             <FormKitSchema :schema="schemaIncome" :data="schemaData" />
           </div>
         </div>
-        <div v-if="false">
-          <h2>Input</h2>
-          <pre class="data">{{ data }}</pre>
-
-          <h2>Output</h2>
-          <pre class="data" v-if="output">{{ output }}</pre>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="false">
+          <div>
+            <heading>Debug Input</heading>
+            <pre class="data">{{ data }}</pre>
+          </div>
+          <div>
+            <heading>Debug Output</heading>
+            <pre class="data" v-if="output">{{ output }}</pre>
+          </div>
         </div>
         <div class="mt-3 mb-3 border-t border-gray-100 pt-8 footer">
           <p class="text-center text-sm md:text-md text-gray-400 pb-2 leading-tight">
