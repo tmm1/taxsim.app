@@ -81,7 +81,7 @@ const federalTaxVars = [
   },
   {
     name: 'tfica',
-    label: 'FICA Tax Withheld',
+    label: [tooltip('FICA', 'Federal Insurance Contributions Act'), ' Tax Withheld'],
     prefix: '+',
   },
   {
@@ -93,7 +93,7 @@ const federalTaxVars = [
 const stateIncomeVars = [
   {
     name: 'v32',
-    label: 'AGI',
+    label: [tooltip('AGI', 'Adjusted Gross Income')],
   },
   {
     name: 'v33',
