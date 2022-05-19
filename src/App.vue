@@ -1310,7 +1310,7 @@ onErrorCaptured(err => {
               legend-class="text-gray-400 font-semibold"
               input-class="rounded-sm border border-gray-200"
               label-class="$reset text-gray-400 text-xs mb-1"
-              :options="{debug: 'Debug Mode'}"
+              :options="{debug: 'Developer Mode'}"
             />
           </div>
         </div>
