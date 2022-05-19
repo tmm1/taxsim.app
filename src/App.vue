@@ -5,7 +5,7 @@ import states from './states.js'
 const federalIncomeVars = [
   {
     name: 'v10',
-    label: 'AGI',
+    label: [tooltip('AGI', 'Adjusted Gross Income')],
   },
   {
     name: 'v14',
@@ -39,12 +39,12 @@ const federalCreditVars = [
   },
   {
     name: 'v27',
-    label: 'AMT',
+    label: [tooltip('AMT', 'Alternative Minimum Tax')],
     prefix: '+',
   },
   {
     name: 'v43',
-    label: 'NIIT',
+    label: [tooltip('NIIT', 'Net Investment Income Tax')],
     prefix: '+',
   },
   {
@@ -137,26 +137,7 @@ const stateTaxVars = [
   },
   {
     name: 'socredit',
-    label: [
-      {
-        $cmp: 'popper',
-        props: {
-          hover: true,
-          arrow: true,
-          placement: 'right',
-          content: 'Fuel Credit, Low Income Credit, etc',
-        },
-        children: [
-          {
-            $el: 'span',
-            attrs: {
-              class: 'border-b border-dashed',
-            },
-            children: 'Other Credits',
-          },
-        ],
-      },
-    ],
+    label: [tooltip('Other Credits', 'Fuel Credit, Low Income Credit, etc')],
     prefix: '-',
     onlyIf: 'true',
   },
@@ -429,6 +410,27 @@ function aHref(text, href) {
       href,
     },
     children: text,
+  }
+}
+
+function tooltip(name, desc) {
+  return {
+    $cmp: 'popper',
+    props: {
+      hover: true,
+      arrow: true,
+      placement: 'right',
+      content: desc,
+    },
+    children: [
+      {
+        $el: 'span',
+        attrs: {
+          class: 'border-b border-dashed',
+        },
+        children: name,
+      },
+    ],
   }
 }
 
