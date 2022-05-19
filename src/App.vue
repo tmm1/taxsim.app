@@ -1074,6 +1074,7 @@ const data = ref({})
 const visible = ref({})
 const debug = ref(!!getParam('debug'))
 const output = ref({})
+const input = ref({})
 const addCredits = ref(false)
 const addIncome = ref(false)
 
@@ -1125,7 +1126,7 @@ function filingStatus(input) {
   }
 }
 
-async function recompute(input) {
+async function recompute(data) {
   var url = new URL(window.location)
   for (let k in data.value) {
     let v = data.value[k]
@@ -1147,11 +1148,18 @@ async function recompute(input) {
     }
   }
 
-  let {nonprop, nonprop_adjust, mstat, ...vars} = input
-  let res = await taxsim({
-    ...vars,
+  let {nonprop, nonprop_adjust, mstat, ...vars} = data
+  let inp = {
     mstat: filingStatus(mstat),
-    nonprop: parseFloat(nonprop) - parseFloat(nonprop_adjust),
+    nonprop: parseFloat(nonprop || 0) - parseFloat(nonprop_adjust || 0),
+  }
+  for (let o in vars) {
+    if (vars[o]) {
+      inp[o] = parseFloat(vars[o])
+    }
+  }
+  let res = await taxsim({
+    ...inp,
     idtl: 2,
     // idtl: 5,
   })
@@ -1166,6 +1174,8 @@ async function recompute(input) {
   }
   out.netftax = out.fiitax + out.tfica
   out.socredit = out.v40 - out.v37 - out.v38 - out.v39
+
+  input.value = inp
   output.value = out
   error.value = null
 
@@ -1228,7 +1238,7 @@ onErrorCaptured(err => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="debug">
           <div>
             <heading>Debug Input</heading>
-            <pre class="data">{{ data }}</pre>
+            <pre class="data">{{ input }}</pre>
           </div>
           <div>
             <heading>Debug Output</heading>
