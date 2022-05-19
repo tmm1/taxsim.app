@@ -1058,7 +1058,11 @@ async function recompute(input) {
   nextTick(() => {
     let diffY = start.getBoundingClientRect().top - startY
     if (diffY != 0) {
-      window.scroll({top: window.scrollY + diffY})
+      let scrollY = window.scrollY
+      if (scrollY != 0) {
+        //console.log('recompute', {diffY, scrollY, startY})
+        window.scroll({top: scrollY + diffY})
+      }
     }
   })
 }
