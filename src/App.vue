@@ -1,5 +1,5 @@
 <script setup>
-import {ref, reactive, onErrorCaptured} from 'vue'
+import {ref, reactive, onErrorCaptured, nextTick} from 'vue'
 import states from './states.js'
 
 const federalIncomeVars = [
@@ -822,6 +822,15 @@ async function recompute(input) {
   out.socredit = out.v40 - out.v37 - out.v38 - out.v39
   output.value = out
   error.value = null
+
+  let start = document.getElementById('demographics')
+  let startY = start.getBoundingClientRect().top
+  nextTick(() => {
+    let diffY = start.getBoundingClientRect().top - startY
+    if (diffY != 0) {
+      window.scroll({top: window.scrollY + diffY})
+    }
+  })
 }
 
 const error = ref()
@@ -852,7 +861,7 @@ onErrorCaptured(err => {
             <FormKitSchema :schema="[outputFederal, outputState].flat()" :data="schemaData" />
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
+        <div id="demographics" class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
           <heading class="col-start-0 col-span-2 md:col-span-4">Demographics</heading>
           <FormKitSchema :schema="schemaDemographics" :data="schemaData" />
         </div>
