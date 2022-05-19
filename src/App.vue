@@ -602,7 +602,6 @@ const schemaIncome = incomeVars
     name: item.name,
     key: item.name,
     label: item.label,
-    help: '$output',
     outerClass: 'col-span-2',
     if: `$addIncome || $visible.${item.name}`,
     min: item.type == 'gainorloss' ? -MAX : 0,
@@ -610,6 +609,7 @@ const schemaIncome = incomeVars
     step: STEP,
     delay: 0,
     value: getParam(item.name) || 0,
+    help: '$output',
     sectionsSchema: {
       help: item.help
         ? {
@@ -658,6 +658,19 @@ const creditsVars = [
   {
     name: 'childcare',
     label: 'Child Care Expenses',
+    max: 25000,
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: [
+          'Expenses for child and dependent care, including some household expenses, affect the ',
+          aHref('Child Care Credit', 'https://en.wikipedia.org/wiki/Child_and_Dependent_Care_Credit'),
+        ],
+      },
+    ],
   },
   {
     name: 'proptax',
@@ -701,7 +714,7 @@ const creditOuts = [
   },
   {
     name: 'v24',
-    label: 'Child Care Credit',
+    label: 'Child & Dependent Care Credit',
   },
   {
     name: 'v25',
@@ -791,7 +804,6 @@ const schemaCredits = creditOuts
       name: item.name,
       key: item.name,
       label: item.label,
-      help: item.help,
       outerClass: 'col-span-2',
       if: [item.if, `$addCredits || $visible.${item.name}`].filter(o => !!o).join(' && '),
       min: 0,
@@ -799,7 +811,21 @@ const schemaCredits = creditOuts
       step: STEP,
       delay: 0,
       value: getParam(item.name) || 0,
+      help: '$output',
       sectionsSchema: {
+        help: item.help
+          ? {
+              $el: 'div',
+              if: '$help',
+              attrs: {
+                class: 'text-xs font-normal text-gray-500 mt-1 mb-2 leading-tight pt-2 px-3 border-t border-gray-100',
+              },
+              children: item.help,
+            }
+          : {
+              $el: null,
+              children: [],
+            },
         label: {
           children: [
             '$label',
