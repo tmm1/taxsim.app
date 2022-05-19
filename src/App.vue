@@ -642,14 +642,63 @@ const incomeVars = [
   {
     name: 'otherprop',
     label: 'Other Property Income',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: ['Income from property, which is subject to ', tooltip('NIIT', 'Net Investment Income Tax'), '.'],
+      },
+      {
+        $el: 'div',
+        children: [
+          listItems(
+            'Unearned or limited partnership, and passive S-Corp profits',
+            'Rental income',
+            'Non-Qualified Dividends (ordinary dividends minus qualified dividends)'
+          ),
+        ],
+      },
+    ],
   },
   {
     name: 'nonprop',
     label: 'Other Non-Property Income',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: [
+          'Income from non-property sources, which is not subject to ',
+          tooltip('NIIT', 'Net Investment Income Tax'),
+          '.',
+        ],
+      },
+      {
+        $el: 'div',
+        children: [listItems('Alimony', 'Non-wage fellowships', 'State income tax refunds (itemizers only)')],
+      },
+    ],
   },
   {
     name: 'transfers',
     label: 'Non-Taxable Transfer Income',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: ['Income not taxed at federal level, but which may affect state property tax rebates.'],
+      },
+      {
+        $el: 'div',
+        children: [listItems('Welfare', 'Workers Compensation', 'Veterans Benefits', 'Child Support')],
+      },
+    ],
   },
 ]
 const MAX = 500 * 1000
