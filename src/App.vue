@@ -837,14 +837,19 @@ onErrorCaptured(err => {
           <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight -mt-[0.1em]">
             <span class="font-semibold">an interactive US Individual Income Tax simulator</span>
           </p>
-          <div class="grid grid-cols-2 gap-x-4 md:gap-x-12 md:grid-cols-4 pt-3 pb-3 md:px-12">
-            <FormKitSchema
-              :schema="[schemaFederal, schemaState, outputFederal, outputState].flat()"
-              :data="schemaData"
-            />
+          <div class="grid grid-cols-2 gap-x-4 md:gap-x-12 md:grid-cols-4 pt-3 pb-1 md:px-12">
+            <FormKitSchema :schema="[schemaFederal, schemaState].flat()" :data="schemaData" />
+          </div>
+          <div
+            class="border border-red-300 rounded-lg whitespace-pre-wrap text-rose-400 p-3 mb-6 md:mx-12"
+            v-if="error"
+          >
+            {{ error }}
+          </div>
+          <div class="grid grid-cols-2 gap-x-4 md:gap-x-12 md:grid-cols-4 pb-3 md:px-12" v-else>
+            <FormKitSchema :schema="[outputFederal, outputState].flat()" :data="schemaData" />
           </div>
         </div>
-        <div v-if="error">{{ error }}</div>
         <div class="grid grid-cols-2 gap-x-4 md:grid-cols-4">
           <heading class="col-start-0 col-span-2 md:col-span-4">Demographics</heading>
           <FormKitSchema :schema="schemaDemographics" :data="schemaData" />
