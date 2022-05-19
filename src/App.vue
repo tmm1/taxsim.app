@@ -498,6 +498,15 @@ const incomeVars = [
     name: 'intrec',
     label: 'Taxable Interest Received',
     max: 50000,
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `Banks and other financial institutions report your interest income on <a href="https://en.wikipedia.org/wiki/Form_1099#Variants">Form 1099‑INT</a>.`,
+        },
+      },
+    ],
   },
   {
     name: 'dividends',
@@ -506,6 +515,33 @@ const incomeVars = [
       then: 'Qualified Dividend Income',
       else: 'Dividend Income',
     },
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `Investment funds report your dividends on <a href="https://en.wikipedia.org/wiki/Form_1099#Variants">Form 1099‑DIV</a>.`,
+        },
+      },
+      {
+        $el: 'div',
+        children: {
+          if: '$help.year >= 2003',
+          then: [
+            'Since ',
+            tooltip('JGTRRA in 2003', 'Jobs and Growth Tax Relief Reconciliation Act of 2003'),
+            ', ',
+            aHref('Qualified Dividends', 'https://en.wikipedia.org/wiki/Qualified_dividend'),
+            ' are taxed at long-term capital gain rates.',
+          ],
+          else: [
+            'Dividend income has been subject to various ',
+            aHref('surtaxes and exemptions', 'https://en.wikipedia.org/wiki/Qualified_dividend#History'),
+            ' over time.',
+          ],
+        },
+      },
+    ],
   },
   {
     name: 'stcg',
