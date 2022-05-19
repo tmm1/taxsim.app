@@ -532,6 +532,27 @@ const incomeVars = [
     name: 'psemp',
     spouse: 'ssemp',
     label: 'Self-employment Income',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: [
+          'Self-employment income is subject to ',
+          aHref('self-employment taxes', 'https://en.wikipedia.org/wiki/Self-employment#Taxation'),
+        ],
+      },
+      {
+        $el: 'div',
+        children: [
+          'Tax is similar to the tax on wages, except you pay both the employer and employee portion of the ',
+          tooltip('FICA', 'Federal Insurance Contributions Act'),
+          ' payroll tax. ',
+          'Self-employment income is reported by you on Schedule C, and self-employment tax is computed on Schedule SE of your tax return.',
+        ],
+      },
+    ],
   },
   {
     name: 'intrec',
@@ -586,11 +607,37 @@ const incomeVars = [
     name: 'stcg',
     label: 'Short-term Capital Gain or Loss',
     type: 'gainorloss',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `Stock brokerages report your gains and losses on <a href="https://en.wikipedia.org/wiki/Form_1099#Variants">Form 1099‑B</a>.`,
+        },
+      },
+    ],
   },
   {
     name: 'ltcg',
     label: 'Long-term Capital Gain or Loss',
     type: 'gainorloss',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `Stock brokerages report your gains and losses on <a href="https://en.wikipedia.org/wiki/Form_1099#Variants">Form 1099‑B</a>.`,
+        },
+      },
+      {
+        $el: 'div',
+        children: [
+          'Long-term gains from assets held for more than a year are taxed at a lower ',
+          aHref('capital gains rate', 'https://en.wikipedia.org/wiki/Capital_gains_tax_in_the_United_States'),
+          '.',
+        ],
+      },
+    ],
   },
   {
     name: 'otherprop',
