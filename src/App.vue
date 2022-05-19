@@ -9,7 +9,7 @@ const federalIncomeVars = [
   },
   {
     name: 'v14',
-    label: 'Personal Exemptions',
+    label: 'Personal Exemption',
     prefix: '-',
   },
   {
@@ -655,7 +655,16 @@ const creditOuts = [
   },
   {
     name: 'v14',
-    label: 'Personal Exemptions',
+    label: 'Personal Exemption',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `The <a href="https://en.wikipedia.org/wiki/Personal_exemption">Personal Exemption</a> is a tax deduction, similar to but distinct from the Standard Deduction.`,
+        },
+      },
+    ],
   },
   {
     name: 'v13',
