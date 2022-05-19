@@ -1074,7 +1074,10 @@ const data = ref({})
 const visible = ref({})
 const debug = ref(!!getParam('debug'))
 const output = ref({})
+const outputRaw = ref('')
+const outputCSV = ref('')
 const input = ref({})
+const inputCSV = ref('')
 const addCredits = ref(false)
 const addIncome = ref(false)
 
@@ -1128,10 +1131,19 @@ function filingStatus(input) {
 
 async function recompute(data) {
   var url = new URL(window.location)
-  for (let k in data.value) {
-    let v = data.value[k]
+  for (let k in data) {
+    let v = data[k]
     if (v === undefined || v == 0 || v == '0') {
       url.searchParams.delete(k)
+      continue
+    }
+    if (k == 'debug') {
+      for (let kk in v) {
+        let vv = v[kk]
+        if (vv) {
+          url.searchParams.set('debug.' + kk, vv)
+        }
+      }
       continue
     }
     url.searchParams.set(k, v)
@@ -1148,7 +1160,7 @@ async function recompute(data) {
     }
   }
 
-  let {nonprop, nonprop_adjust, mstat, ...vars} = data
+  let {debug, nonprop, nonprop_adjust, mstat, ...vars} = data
   let inp = {
     mstat: filingStatus(mstat),
     nonprop: parseFloat(nonprop || 0) - parseFloat(nonprop_adjust || 0),
@@ -1158,13 +1170,18 @@ async function recompute(data) {
       inp[o] = parseFloat(vars[o])
     }
   }
+  inputCSV.value =
+    Object.keys(inp).join(',') +
+    '\n' +
+    Object.keys(inp)
+      .map(k => inp[k])
+      .join(',') +
+    '\n'
   let res = await taxsim({
     ...inp,
     idtl: 2,
-    // idtl: 5,
   })
-  // output.value = res
-  // return
+  outputCSV.value = res
   let lines = res.split('\r\n')
   let keys = lines[0].split(',')
   let vals = lines[1].split(',')
@@ -1177,6 +1194,10 @@ async function recompute(data) {
 
   input.value = inp
   output.value = out
+  outputRaw.value = await taxsim({
+    ...inp,
+    idtl: 5,
+  })
   error.value = null
 
   let start = document.getElementById('demographics')
@@ -1236,14 +1257,35 @@ onErrorCaptured(err => {
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="debug">
-          <div>
-            <heading>Debug Input</heading>
-            <pre class="data">{{ input }}</pre>
-          </div>
-          <div>
-            <heading>Debug Output</heading>
-            <pre class="data" v-if="output">{{ output }}</pre>
-          </div>
+          <FormKit type="group" name="debug">
+            <div>
+              <heading>Input</heading>
+              <FormKit
+                type="select"
+                :options="{'': 'JSON', csv: 'CSV'}"
+                :value="getParam('debug.input')"
+                name="input"
+                outer-class="-mt-4 w-fit mx-auto"
+                input-class="$reset px-3 border-none bg-white text-sm h-fit w-fit"
+              />
+              <pre class="data" v-text="inputCSV" v-if="data.debug.input == 'csv'" />
+              <pre class="data" v-text="input" v-else />
+            </div>
+            <div>
+              <heading>Output</heading>
+              <FormKit
+                type="select"
+                :options="{'': 'JSON', csv: 'CSV', text: 'Text'}"
+                :value="getParam('debug.output')"
+                name="output"
+                outer-class="-mt-4 w-fit mx-auto"
+                input-class="$reset px-3 border-none bg-white text-sm h-fit w-fit"
+              />
+              <pre class="data" v-text="outputRaw" v-if="data.debug.output == 'text'" />
+              <pre class="data" v-text="outputCSV" v-else-if="data.debug.output == 'csv'" />
+              <pre class="data" v-text="output" v-else />
+            </div>
+          </FormKit>
         </div>
         <div class="mt-3 mb-3 border-t border-gray-100 pt-8 footer">
           <p class="text-center text-sm md:text-md text-gray-400 pb-2 leading-tight">
@@ -1269,12 +1311,13 @@ main {
   @apply decoration-slate-300 underline;
 }
 pre.data {
-  @apply font-mono mx-10 my-4;
-  font-size: 10pt;
-  overflow-x: auto;
+  @apply font-mono mx-10 my-4 whitespace-pre-line break-all text-xs text-gray-500;
 }
 .summary {
   @apply border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-2 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden;
+}
+.formkit-inner select:focus {
+  outline: none;
 }
 .input-numeric,
 .input-amount {
