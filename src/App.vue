@@ -479,15 +479,42 @@ const incomeVars = [
   {
     name: 'pensions',
     label: 'Taxable Pensions and IRA distributions',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `Distributions from pensions, IRAs, annuities and other retirement plans are reported to you on <a href="https://en.wikipedia.org/wiki/Form_1099#Variants">Form 1099‑R</a>.`,
+        },
+      },
+    ],
   },
   {
     name: 'gssi',
     label: 'Gross Social Security Benefits',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `Social security payments are reported to you on <a href="https://en.wikipedia.org/wiki/Form_1099#Variants">Form SSA‑1099</a>.`,
+        },
+      },
+    ],
   },
   {
     name: 'pui',
     spouse: 'ui',
     label: 'Unemployment Compensation Received',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+          innerHTML: /*html*/ `Unemployment insurance payments are reported to you on <a href="https://en.wikipedia.org/wiki/Form_1099#Variants">Form 1099‑G</a>.`,
+        },
+      },
+    ],
   },
   {
     name: 'psemp',
