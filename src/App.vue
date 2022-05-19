@@ -434,6 +434,19 @@ function tooltip(name, desc) {
   }
 }
 
+function listItems() {
+  return {
+    $el: 'ul',
+    attrs: {
+      class: 'list-disc list-inside ml-3',
+    },
+    children: Array.from(arguments).map(o => ({
+      $el: 'li',
+      children: o,
+    })),
+  }
+}
+
 const incomeVars = [
   {
     name: 'pwages',
@@ -673,21 +686,107 @@ const creditsVars = [
     ],
   },
   {
-    name: 'proptax',
-    label: 'Real Estate Taxes Paid',
-  },
-  {
     name: 'rentpaid',
     label: 'Rent Paid',
     if: '$get(state).value',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: ["Rent payments may be eligible for a renters' tax credit."],
+      },
+    ],
+  },
+  {
+    name: 'proptax',
+    label: 'Real Estate Taxes Paid',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: [
+          'Real estate taxes feed into ',
+          aHref('itemized deductions', 'https://en.wikipedia.org/wiki/Itemized_deduction'),
+          '.',
+        ],
+      },
+      {
+        $el: 'div',
+        children: ['Affects ', tooltip('AMT', 'Alternative Minimum Tax'), ' and state property tax rebates.'],
+      },
+    ],
   },
   {
     name: 'mortgage',
     label: 'Itemized Deductions',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: [
+          aHref('Itemized deductions', 'https://en.wikipedia.org/wiki/Itemized_deduction'),
+          ' can be claimed instead of the ',
+          aHref('Standard Deduction', 'https://en.wikipedia.org/wiki/Standard_deduction'),
+          '.',
+        ],
+      },
+      {
+        $el: 'div',
+        children: [
+          'Include entries from Schedule A which do not affect ',
+          tooltip('AMT', 'Alternative Minimum Tax'),
+          ':',
+          listItems(
+            'Home mortgage interest',
+            ['Deductible medical expenses'],
+            'Motor Vehicle registration fees',
+            'Charitable contributions',
+            'Casulty or Theft losses'
+          ),
+        ],
+      },
+    ],
   },
   {
     name: 'otheritem',
-    label: 'Itemized Deductions (AMT)',
+    label: ['Other Itemized Deductions'],
+    max: 25000,
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: [
+          'Other ',
+          aHref('itemized deductions', 'https://en.wikipedia.org/wiki/Itemized_deduction'),
+          ', which are a preference for ',
+          tooltip('AMT', 'Alternative Minimum Tax'),
+          '.',
+        ],
+      },
+      {
+        $el: 'div',
+        children: [
+          'These include the following entries from Schedule A:',
+          listItems(
+            'Other state and local taxes',
+            [
+              'Deductible medical expenses (',
+              aHref('preference share only', 'https://taxsim.nber.org/taxsim-calc9/medical_deduction.html'),
+              ')',
+            ],
+            'Miscellaneous expenses'
+          ),
+        ],
+      },
+    ],
   },
 ]
 const creditOuts = [
