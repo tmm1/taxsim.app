@@ -139,7 +139,6 @@ const stateTaxVars = [
     name: 'socredit',
     label: [tooltip('Other Credits', 'Fuel Credit, Low Income Credit, etc')],
     prefix: '-',
-    onlyIf: 'true',
   },
   {
     name: 'siitax',
