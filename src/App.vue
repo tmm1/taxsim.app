@@ -883,6 +883,25 @@ const creditsVars = [
       },
     ],
   },
+  {
+    name: 'nonprop_adjust',
+    label: 'Other Adjustments',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: ['Adjustments to income, including'],
+      },
+      {
+        $el: 'div',
+        children: [
+          listItems('Alimony Paid', 'Keogh and IRA contributions', 'Foreign Income Exclusion', 'Net Operating Losses'),
+        ],
+      },
+    ],
+  },
 ]
 const creditOuts = [
   {
@@ -1128,9 +1147,11 @@ async function recompute(input) {
     }
   }
 
+  let {nonprop, nonprop_adjust, mstat, ...vars} = input
   let res = await taxsim({
-    ...input,
-    mstat: filingStatus(input.mstat),
+    ...vars,
+    mstat: filingStatus(mstat),
+    nonprop: parseFloat(nonprop) - parseFloat(nonprop_adjust),
     idtl: 2,
     // idtl: 5,
   })
