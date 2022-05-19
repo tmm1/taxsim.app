@@ -1070,9 +1070,8 @@ const schemaCredits = creditOuts
     },
   ])
 
-const data = ref({})
+const data = ref({settings: [getParam('debug') ? 'debug' : null].filter(o => !!o)})
 const visible = ref({})
-const debug = ref(!!getParam('debug'))
 const output = ref({})
 const outputRaw = ref('')
 const outputCSV = ref('')
@@ -1133,10 +1132,6 @@ async function recompute(data) {
   var url = new URL(window.location)
   for (let k in data) {
     let v = data[k]
-    if (v === undefined || v == 0 || v == '0') {
-      url.searchParams.delete(k)
-      continue
-    }
     if (k == 'debug') {
       for (let kk in v) {
         let vv = v[kk]
@@ -1144,9 +1139,20 @@ async function recompute(data) {
           url.searchParams.set('debug.' + kk, vv)
         }
       }
-      continue
+    } else if (k == 'settings') {
+      if (v.indexOf('debug') >= 0) url.searchParams.set('debug', '1')
+      else {
+        url.searchParams.delete('debug')
+        url.searchParams.delete('debug.input')
+        url.searchParams.delete('debug.output')
+      }
+    } else {
+      if (v === undefined || v == 0 || v == '0') {
+        url.searchParams.delete(k)
+        continue
+      }
+      url.searchParams.set(k, v)
     }
-    url.searchParams.set(k, v)
   }
   window.history.replaceState('', '', url)
   for (let o of incomeVars) {
@@ -1160,7 +1166,7 @@ async function recompute(data) {
     }
   }
 
-  let {debug, nonprop, nonprop_adjust, mstat, ...vars} = data
+  let {settings, debug, nonprop, nonprop_adjust, mstat, ...vars} = data
   let inp = {
     mstat: filingStatus(mstat),
     nonprop: parseFloat(nonprop || 0) - parseFloat(nonprop_adjust || 0),
@@ -1256,7 +1262,7 @@ onErrorCaptured(err => {
             <FormKitSchema :schema="schemaIncome" :data="schemaData" />
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="debug">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="data.settings.indexOf('debug') >= 0">
           <FormKit type="group" name="debug">
             <div>
               <heading>Input</heading>
@@ -1295,6 +1301,18 @@ onErrorCaptured(err => {
             <a href="https://github.com/tmm1/taxsim.js">WASM build</a> of
             <a href="https://taxsim.nber.org">NBER TAXSIM</a>
           </p>
+          <div class="mt-4">
+            <FormKit
+              type="checkbox"
+              label="Settings"
+              name="settings"
+              fieldset-class="mx-auto max-w-fit"
+              legend-class="text-gray-400 font-semibold"
+              input-class="rounded-sm border border-gray-200"
+              label-class="$reset text-gray-400 text-xs mb-1"
+              :options="{debug: 'Debug Mode'}"
+            />
+          </div>
         </div>
       </main>
     </div>
