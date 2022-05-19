@@ -477,6 +477,19 @@ const incomeVars = [
     ],
   },
   {
+    name: 'pensions',
+    label: 'Taxable Pensions and IRA distributions',
+  },
+  {
+    name: 'gssi',
+    label: 'Gross Social Security Benefits',
+  },
+  {
+    name: 'pui',
+    spouse: 'ui',
+    label: 'Unemployment Compensation Received',
+  },
+  {
     name: 'psemp',
     spouse: 'ssemp',
     label: 'Self-employment Income',
@@ -485,6 +498,14 @@ const incomeVars = [
     name: 'intrec',
     label: 'Taxable Interest Received',
     max: 50000,
+  },
+  {
+    name: 'dividends',
+    label: {
+      if: '$get(year).value * 1 >= 2003',
+      then: 'Qualified Dividend Income',
+      else: 'Dividend Income',
+    },
   },
   {
     name: 'stcg',
@@ -497,17 +518,16 @@ const incomeVars = [
     type: 'gainorloss',
   },
   {
-    name: 'pui',
-    spouse: 'ui',
-    label: 'Unemployment Compensation Received',
+    name: 'otherprop',
+    label: 'Other Property Income',
   },
   {
-    name: 'pensions',
-    label: 'Taxable Pensions and IRA distributions',
+    name: 'nonprop',
+    label: 'Other Non-Property Income',
   },
   {
-    name: 'gssi',
-    label: 'Gross Social Security Benefits',
+    name: 'transfers',
+    label: 'Non-Taxable Transfer Income',
   },
 ]
 const MAX = 500 * 1000
@@ -573,12 +593,25 @@ const schemaIncome = incomeVars
 
 const creditsVars = [
   {
+    name: 'childcare',
+    label: 'Child Care Expenses',
+  },
+  {
+    name: 'proptax',
+    label: 'Real Estate Taxes Paid',
+  },
+  {
+    name: 'rentpaid',
+    label: 'Rent Paid',
+    if: '$get(state).value',
+  },
+  {
     name: 'mortgage',
     label: 'Itemized Deductions',
   },
   {
-    name: 'childcare',
-    label: 'Child Care Expenses',
+    name: 'otheritem',
+    label: 'Itemized Deductions (AMT)',
   },
 ]
 const creditOuts = [
@@ -688,7 +721,7 @@ const schemaCredits = creditOuts
       label: item.label,
       help: item.help,
       outerClass: 'col-span-2',
-      if: `$addCredits || $visible.${item.name}`,
+      if: [item.if, `$addCredits || $visible.${item.name}`].filter(o => !!o).join(' && '),
       min: 0,
       max: item.max || MAX,
       step: STEP,
