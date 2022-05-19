@@ -907,7 +907,7 @@ onErrorCaptured(err => {
           <heading class="col-start-0 col-span-2 md:col-span-4">Demographics</heading>
           <FormKitSchema :schema="schemaDemographics" :data="schemaData" />
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
           <div>
             <heading class="col-start-0 col-span-2 md:col-span-4">Deductions &amp; Credits</heading>
             <FormKitSchema :schema="schemaCredits" :data="schemaData" />
