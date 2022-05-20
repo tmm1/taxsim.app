@@ -16,9 +16,9 @@
     "wrangler": "^2.0.2"
   },
   "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
-    "deploy": "vite build && npx wrangler pages publish ./dist",
+    "dev": "make && vite --host",
+    "build": "make && vite build",
+    "deploy": "make && vite build && npx wrangler pages publish ./dist",
     "serve": "vite preview"
   }
 }
