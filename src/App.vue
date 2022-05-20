@@ -710,6 +710,11 @@ const schemaIncome = incomeVars
     name: item.name,
     key: item.name,
     label: item.label,
+    inputType: {
+      if: '$settings.numeric',
+      then: 'number',
+      else: 'range',
+    },
     outerClass: 'col-span-2',
     if: `$addIncome || $visible.${item.name}`,
     min: item.type == 'gainorloss' ? -MAX : 0,
@@ -1017,6 +1022,11 @@ const schemaCredits = creditOuts
       name: item.name,
       key: item.name,
       label: item.label,
+      inputType: {
+        if: '$settings.numeric',
+        then: 'number',
+        else: 'range',
+      },
       outerClass: 'col-span-2',
       if: [item.if, `$addCredits || $visible.${item.name}`].filter(o => !!o).join(' && '),
       min: 0,
@@ -1070,7 +1080,8 @@ const schemaCredits = creditOuts
     },
   ])
 
-const data = ref({settings: [getParam('debug') ? 'debug' : null].filter(o => !!o)})
+const settings = ref({debug: !!getParam('debug'), numeric: !!getParam('settings.numeric')})
+const data = ref({settings})
 const visible = ref({})
 const output = ref({})
 const outputRaw = ref('')
@@ -1089,6 +1100,7 @@ for (let o of [incomeVars, creditsVars].flat()) {
 const schemaData = reactive({
   visible,
   output,
+  settings,
   addCredits,
   addIncome,
   toggleAddIncome: () => {
@@ -1140,12 +1152,14 @@ async function recompute(data) {
         }
       }
     } else if (k == 'settings') {
-      if (v.indexOf('debug') >= 0) url.searchParams.set('debug', '1')
+      if (v.debug) url.searchParams.set('debug', '1')
       else {
         url.searchParams.delete('debug')
         url.searchParams.delete('debug.input')
         url.searchParams.delete('debug.output')
       }
+      if (v.numeric) url.searchParams.set('settings.numeric', '1')
+      else url.searchParams.delete('settings.numeric')
     } else {
       if (v === undefined || v == 0 || v == '0') {
         url.searchParams.delete(k)
@@ -1262,7 +1276,7 @@ onErrorCaptured(err => {
             <FormKitSchema :schema="schemaIncome" :data="schemaData" />
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="data.settings.indexOf('debug') >= 0">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="data.settings.debug">
           <FormKit type="group" name="debug">
             <div>
               <heading>Input</heading>
@@ -1301,17 +1315,22 @@ onErrorCaptured(err => {
             <a href="https://github.com/tmm1/taxsim.js">WASM build</a> of
             <a href="https://taxsim.nber.org">NBER TAXSIM</a>
           </p>
-          <div class="mt-4">
-            <FormKit
-              type="checkbox"
-              label="Settings"
-              name="settings"
-              fieldset-class="mx-auto max-w-fit"
-              legend-class="text-gray-400 font-semibold"
-              input-class="rounded-sm border border-gray-200"
-              label-class="$reset text-gray-400 text-xs mb-1"
-              :options="{debug: 'Developer Mode'}"
-            />
+          <div class="mt-4 mx-auto w-fit">
+            <p class="text-gray-400 font-semibold text-center mx-auto text-sm mb-2 pt-4">Settings</p>
+            <FormKit type="group" name="settings">
+              <FormKit
+                type="checkbox"
+                v-for="(val, key) in {numeric: 'Numeric Entry Mode', debug: 'Developer Mode'}"
+                :key="key"
+                :label="val"
+                :name="key"
+                outer-class="$reset"
+                fieldset-class="mx-auto max-w-fit"
+                legend-class="text-gray-400 font-semibold"
+                input-class="rounded-sm border border-gray-200"
+                label-class="$reset text-gray-400 text-xs mb-1"
+              />
+            </FormKit>
           </div>
         </div>
       </main>
@@ -1345,6 +1364,12 @@ pre.data {
   input {
     text-align: center;
     -moz-appearance: textfield;
+  }
+  input[type='number'] {
+    @apply text-sm text-gray-500;
+  }
+  input[type='range'] {
+    @apply appearance-none h-2 p-0 bg-gray-300;
   }
   input::-webkit-inner-spin-button,
   input::-webkit-outer-spin-button {

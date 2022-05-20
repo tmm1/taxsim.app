@@ -72,8 +72,7 @@ export default {
   amount: {
     ...textClassification,
     inner: '',
-    input:
-      'form-range appearance-none w-full h-2 p-0 bg-gray-300 rounded-full focus:outline-none focus:ring-0 focus:shadow-none',
+    input: 'w-full rounded-full focus:outline-none focus:ring-0 focus:shadow-none',
     outer: 'border border-gray-200 rounded-lg p-1',
     label: 'block mb-1 font-bold text-sm formkit-invalid:text-red-500 px-3 pt-1',
   },

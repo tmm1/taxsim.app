@@ -27,7 +27,7 @@ export default createInput(
           attrs: {
             id: '$id',
             name: '$name',
-            type: 'range',
+            type: '$inputType || "range"',
             class: '$classes.input',
             onInput: '$handlers.DOMInput',
             onBlur: '$handlers.blur',
@@ -56,7 +56,7 @@ export default createInput(
   ],
   {
     features: [addHandlers],
-    props: ['min', 'max', 'step'],
+    props: ['min', 'max', 'step', 'input-type'],
   }
 )
 
