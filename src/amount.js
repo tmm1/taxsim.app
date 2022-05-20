@@ -27,7 +27,7 @@ export default createInput(
           attrs: {
             id: '$id',
             name: '$name',
-            type: '$inputType || "range"',
+            type: '$inputType || $fns.fallbackInputType()',
             class: '$classes.input',
             onInput: '$handlers.DOMInput',
             onBlur: '$handlers.blur',
@@ -60,8 +60,17 @@ export default createInput(
   }
 )
 
+function getParam(name) {
+  const url = new URL(window.location)
+  const params = url.searchParams || {get: () => null}
+  return params.get(name)
+}
+
 function addHandlers(node) {
   node.on('created', () => {
+    node.context.fns.fallbackInputType = () => {
+      return getParam('settings.numeric') ? 'number' : 'range'
+    }
     node.context.handlers.increment = e => {
       e.preventDefault()
       if (node.context.disabled) return
