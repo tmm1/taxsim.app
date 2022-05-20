@@ -77,7 +77,7 @@ const federalCreditVars = [
   },
   {
     name: 'v45',
-    label: 'CARES Recovery Rebate',
+    label: [tooltip('CARES', 'Coronavirus Aid, Relief, and Economic Security Act'), ' Recovery Rebate'],
     prefix: '-',
   },
 ]
