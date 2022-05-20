@@ -211,7 +211,7 @@ async function copyOutput() {
 </script>
 
 <template>
-  <FormKit type="group" v-model="data" @load="recompute" @input="recompute">
+  <FormKit type="group" v-model="data" @input="recompute">
     <div class="flex flex-col md:flex-row">
       <main class="min-h-screen p-4 pt-2 mx-auto max-w-4xl">
         <div>
@@ -271,7 +271,7 @@ async function copyOutput() {
             <FormKitSchema :schema="schemaIncome" :data="schemaData" />
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="data.settings.debug">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="settings.debug">
           <FormKit type="group" name="debug">
             <div>
               <heading>Input</heading>
