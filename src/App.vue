@@ -1138,15 +1138,15 @@ function getParam(name) {
 function filingStatus(input) {
   switch (input) {
     case 'single':
-      return '1'
+      return 1
     case 'headOfHousehold':
-      return '1'
+      return 1
     case 'married':
-      return '2'
+      return 2
     case 'marriedFilingSeparately':
-      return '6'
+      return 6
     case 'dependent':
-      return '8'
+      return 8
   }
 }
 
