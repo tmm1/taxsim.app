@@ -1249,9 +1249,21 @@ onErrorCaptured(err => {
   error.value = err
 })
 
+async function copyText(txt) {
+  if (navigator.clipboard) {
+    await navigator.clipboard.writeText(txt)
+    return
+  }
+  document.oncopy = function (e) {
+    e.clipboardData.setData('text/plain', txt)
+    e.preventDefault()
+  }
+  document.execCommand('copy')
+}
+
 async function copyInput() {
   let dbg = data.value.debug
-  navigator.clipboard.writeText(dbg.input == 'csv' ? inputCSV.value : JSON.stringify(input.value, null, 2))
+  await copyText(dbg.input == 'csv' ? inputCSV.value : JSON.stringify(input.value, null, 2))
   copiedInput.value = true
   await new Promise(resolve => setTimeout(resolve, 3000))
   copiedInput.value = false
@@ -1259,7 +1271,7 @@ async function copyInput() {
 
 async function copyOutput() {
   let dbg = data.value.debug
-  navigator.clipboard.writeText(
+  await copyText(
     dbg.output == 'csv'
       ? outputCSV.value
       : dbg.output == 'text'
@@ -1314,7 +1326,13 @@ async function copyOutput() {
               <heading>Input</heading>
               <div>
                 <p class="float-right mr-2">
-                  <popper arrow hover placement="left" content="Copy to clipboard">
+                  <popper
+                    arrow
+                    hover
+                    placement="left"
+                    @open:popper="copyInput"
+                    :content="(copiedInput ? 'Copied' : 'Copy') + ' to clipboard'"
+                  >
                     <FormKit type="button" @click="copyInput"
                       ><component :is="copiedInput ? ClipboardCheckIcon : ClipboardCopyIcon" class="h-4 w-4" /></FormKit
                   ></popper>
@@ -1335,7 +1353,13 @@ async function copyOutput() {
               <heading>Output</heading>
               <div>
                 <p class="float-right mr-2">
-                  <popper arrow hover placement="left" content="Copy to clipboard">
+                  <popper
+                    arrow
+                    hover
+                    placement="left"
+                    @open:popper="copyOutput"
+                    :content="(copiedOutput ? 'Copied' : 'Copy') + ' to clipboard'"
+                  >
                     <FormKit type="button" @click="copyOutput"
                       ><component :is="copiedOutput ? ClipboardCheckIcon : ClipboardCopyIcon" class="h-4 w-4"
                     /></FormKit>
