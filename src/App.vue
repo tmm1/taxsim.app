@@ -1314,9 +1314,10 @@ async function copyOutput() {
               <heading>Input</heading>
               <div>
                 <p class="float-right mr-2">
-                  <FormKit type="button" @click="copyInput" title="Copy to clipboard"
-                    ><component :is="copiedInput ? ClipboardCheckIcon : ClipboardCopyIcon" class="h-4 w-4"
-                  /></FormKit>
+                  <popper arrow hover placement="left" content="Copy to clipboard">
+                    <FormKit type="button" @click="copyInput"
+                      ><component :is="copiedInput ? ClipboardCheckIcon : ClipboardCopyIcon" class="h-4 w-4" /></FormKit
+                  ></popper>
                 </p>
                 <FormKit
                   type="select"
@@ -1334,9 +1335,11 @@ async function copyOutput() {
               <heading>Output</heading>
               <div>
                 <p class="float-right mr-2">
-                  <FormKit type="button" @click="copyOutput" title="Copy to clipboard"
-                    ><component :is="copiedOutput ? ClipboardCheckIcon : ClipboardCopyIcon" class="h-4 w-4"
-                  /></FormKit>
+                  <popper arrow hover placement="left" content="Copy to clipboard">
+                    <FormKit type="button" @click="copyOutput"
+                      ><component :is="copiedOutput ? ClipboardCheckIcon : ClipboardCopyIcon" class="h-4 w-4"
+                    /></FormKit>
+                  </popper>
                 </p>
                 <FormKit
                   type="select"
