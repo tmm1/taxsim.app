@@ -1193,8 +1193,9 @@ async function recompute(data) {
   let {settings, debug, nonprop, nonprop_adjust, mstat, ...vars} = data
   let inp = {
     mstat: filingStatus(mstat),
-    nonprop: parseFloat(nonprop || 0) - parseFloat(nonprop_adjust || 0),
   }
+  let nprop = parseFloat(nonprop || 0) - parseFloat(nonprop_adjust || 0)
+  if (nprop) inp.nonprop = nprop
   for (let o in vars) {
     if (vars[o]) {
       inp[o] = parseFloat(vars[o])
