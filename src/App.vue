@@ -1,8 +1,8 @@
 <script>
-import {ClipboardCopyIcon, ClipboardCheckIcon} from '@heroicons/vue/outline'
+import {CogIcon, ClipboardCopyIcon, ClipboardCheckIcon} from '@heroicons/vue/outline'
 
 export default {
-  components: {ClipboardCopyIcon, ClipboardCheckIcon},
+  components: {CogIcon, ClipboardCopyIcon, ClipboardCheckIcon},
 }
 </script>
 
@@ -1089,6 +1089,19 @@ const schemaCredits = creditOuts
     },
   ])
 
+const settingEntries = [
+  {
+    name: 'numeric',
+    label: 'Numeric Entry Mode',
+    help: 'Replace sliders with text boxes',
+  },
+  {
+    name: 'debug',
+    label: 'Developer Mode',
+    help: 'Show TAXSIM input/outputs',
+  },
+]
+
 const settings = ref({debug: !!getParam('debug'), numeric: !!getParam('settings.numeric')})
 const data = ref({settings})
 const visible = ref({})
@@ -1291,6 +1304,31 @@ async function copyOutput() {
     <div class="flex flex-col md:flex-row">
       <main class="min-h-screen p-4 pt-2 mx-auto max-w-4xl">
         <div>
+          <p class="float-right pt-1">
+            <popper class="menu" offset-distance="0" placement="bottom-end">
+              <CogIcon class="h-5 aspect-square text-gray-600" />
+              <template #content>
+                <p class="text-gray-600 font-semibold mx-auto text-sm mb-2">Settings</p>
+                <div class="ml-3">
+                  <FormKit type="group" name="settings">
+                    <FormKit
+                      type="checkbox"
+                      v-for="s in settingEntries"
+                      :key="s.name"
+                      :label="s.label"
+                      :name="s.name"
+                      :help="s.help"
+                      outer-class="$reset"
+                      fieldset-class="mx-auto max-w-fit"
+                      legend-class="text-gray-600 font-semibold"
+                      input-class="rounded-sm border border-gray-200"
+                      label-class="$reset text-gray-600 text-xs -mt-1 mb-1"
+                      help-class="ml-6 -mt-3 p-0"
+                    />
+                  </FormKit>
+                </div> </template
+            ></popper>
+          </p>
           <p class="text-xl md:text-2xl text-gray-600 font-bold"><a href="/">taxsim.app</a></p>
           <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight -mt-[0.1em]">
             <span class="font-semibold">an interactive US Individual Income Tax simulator</span>
@@ -1392,23 +1430,6 @@ async function copyOutput() {
             <a href="https://github.com/tmm1/taxsim.js">WASM build</a> of
             <a href="https://taxsim.nber.org">NBER TAXSIM</a>
           </p>
-          <div class="mt-4 mx-auto w-fit">
-            <p class="text-gray-400 font-semibold text-center mx-auto text-sm mb-2 pt-4">Settings</p>
-            <FormKit type="group" name="settings">
-              <FormKit
-                type="checkbox"
-                v-for="(val, key) in {numeric: 'Numeric Entry Mode', debug: 'Developer Mode'}"
-                :key="key"
-                :label="val"
-                :name="key"
-                outer-class="$reset"
-                fieldset-class="mx-auto max-w-fit"
-                legend-class="text-gray-400 font-semibold"
-                input-class="rounded-sm border border-gray-200"
-                label-class="$reset text-gray-400 text-xs mb-1"
-              />
-            </FormKit>
-          </div>
         </div>
       </main>
     </div>
@@ -1435,7 +1456,7 @@ pre.data {
 }
 .input-amount {
   input[type='number'] {
-    @apply text-sm text-gray-500;
+    @apply text-sm text-gray-500 border-b border-gray-300 rounded-none;
   }
   input[type='range'] {
     @apply appearance-none h-2 p-0 bg-gray-300;
@@ -1481,8 +1502,20 @@ pre.data {
     @apply text-blue-700;
   }
 }
+.menu {
+  --popper-theme-background-color: #fff;
+  --popper-theme-background-color-hover: #fff;
+  --popper-theme-text-color: theme('colors.gray.500');
+  --popper-theme-border-style: solid;
+  --popper-theme-border-width: theme('borderWidth.DEFAULT');
+  --popper-theme-border-color: theme('colors.gray.400');
+  --popper-theme-border-radius: theme('borderRadius.md');
+  --popper-theme-padding: theme('padding.3');
+  --popper-theme-box-shadow: theme('dropShadow.md');
+}
 .tooltip {
   --popper-theme-background-color: #444;
+  --popper-theme-background-color-hover: #444;
   --popper-theme-text-color: #ffffff;
   --popper-theme-border-width: 0px;
   --popper-theme-border-style: solid;
