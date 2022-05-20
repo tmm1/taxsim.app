@@ -1429,6 +1429,14 @@ pre.data {
 .formkit-inner select:focus {
   outline: none;
 }
+.input-amount {
+  input[type='number'] {
+    @apply text-sm text-gray-500;
+  }
+  input[type='range'] {
+    @apply appearance-none h-2 p-0 bg-gray-300;
+  }
+}
 .input-numeric,
 .input-amount {
   display: flex;
@@ -1437,12 +1445,6 @@ pre.data {
   input {
     text-align: center;
     -moz-appearance: textfield;
-  }
-  input[type='number'] {
-    @apply text-sm text-gray-500;
-  }
-  input[type='range'] {
-    @apply appearance-none h-2 p-0 bg-gray-300;
   }
   input::-webkit-inner-spin-button,
   input::-webkit-outer-spin-button {
