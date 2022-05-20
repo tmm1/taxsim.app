@@ -1,8 +1,7 @@
 {
   "dependencies": {
-    "@formkit/core": "../formkit/packages/core",
-    "@formkit/themes": "^1.0.0-beta.8",
-    "@formkit/vue": "^1.0.0-beta.8",
+    "@formkit/themes": "^1.0.0-beta.9",
+    "@formkit/vue": "^1.0.0-beta.9",
     "@heroicons/vue": "^1.0.6",
     "vue": "^3.2.33",
     "vue3-popper": "^1.4.2"
