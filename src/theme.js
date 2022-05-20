@@ -18,7 +18,7 @@ const boxClassification = {
   help: 'mb-2',
   input: `
     form-check-input
-    h-4 w-4 mr-2
+    h-4 w-5 mr-1
     transition duration-200
   `,
   label: 'text-sm text-gray-700 mb-1',
