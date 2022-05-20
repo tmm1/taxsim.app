@@ -427,6 +427,7 @@ function tooltip(name, desc) {
       hover: true,
       arrow: true,
       placement: 'right',
+      class: 'tooltip',
       content: desc,
     },
     children: [
@@ -1331,7 +1332,8 @@ async function copyOutput() {
                     arrow
                     hover
                     placement="left"
-                    @open:popper="e => {if (e && e.type == 'click') copyInput() }"
+                    class="tooltip"
+                    @open:popper="$event && $event.type == 'click' ? copyInput() : null"
                     :content="(copiedInput ? 'Copied' : 'Copy') + ' to clipboard'"
                   >
                     <FormKit type="button" @click="copyInput"
@@ -1358,7 +1360,8 @@ async function copyOutput() {
                     arrow
                     hover
                     placement="left"
-                    @open:popper="e => {if (e && e.type == 'click') copyOutput() }"
+                    class="tooltip"
+                    @open:popper="$event && $event.type == 'click' ? copyOutput() : null"
                     :content="(copiedOutput ? 'Copied' : 'Copy') + ' to clipboard'"
                   >
                     <FormKit type="button" @click="copyOutput"
@@ -1478,15 +1481,15 @@ pre.data {
     @apply text-blue-700;
   }
 }
-:root {
+.tooltip {
   --popper-theme-background-color: #444;
   --popper-theme-text-color: #ffffff;
   --popper-theme-border-width: 0px;
   --popper-theme-border-style: solid;
   --popper-theme-border-radius: 0.5rem;
   --popper-theme-padding: 0.5rem;
-}
-main .popper {
-  @apply text-[0.65rem];
+  .popper {
+    @apply text-[0.65rem];
+  }
 }
 </style>
