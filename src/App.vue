@@ -1,3 +1,11 @@
+<script>
+import {ClipboardCopyIcon, ClipboardCheckIcon} from '@heroicons/vue/outline'
+
+export default {
+  components: {ClipboardCopyIcon, ClipboardCheckIcon},
+}
+</script>
+
 <script setup>
 import {ref, reactive, onErrorCaptured, nextTick} from 'vue'
 import states from './states.js'
@@ -1090,6 +1098,8 @@ const input = ref({})
 const inputCSV = ref('')
 const addCredits = ref(false)
 const addIncome = ref(false)
+const copiedInput = ref(false)
+const copiedOutput = ref(false)
 
 for (let o of [incomeVars, creditsVars].flat()) {
   if (getParam(o.name)) {
@@ -1238,6 +1248,28 @@ const error = ref()
 onErrorCaptured(err => {
   error.value = err
 })
+
+async function copyInput() {
+  let dbg = data.value.debug
+  navigator.clipboard.writeText(dbg.input == 'csv' ? inputCSV.value : JSON.stringify(input.value, null, 2))
+  copiedInput.value = true
+  await new Promise(resolve => setTimeout(resolve, 3000))
+  copiedInput.value = false
+}
+
+async function copyOutput() {
+  let dbg = data.value.debug
+  navigator.clipboard.writeText(
+    dbg.output == 'csv'
+      ? outputCSV.value
+      : dbg.output == 'text'
+      ? outputRaw.value
+      : JSON.stringify(output.value, null, 2)
+  )
+  copiedOutput.value = true
+  await new Promise(resolve => setTimeout(resolve, 3000))
+  copiedOutput.value = false
+}
 </script>
 
 <template>
@@ -1280,27 +1312,41 @@ onErrorCaptured(err => {
           <FormKit type="group" name="debug">
             <div>
               <heading>Input</heading>
-              <FormKit
-                type="select"
-                :options="{'': 'JSON', csv: 'CSV'}"
-                :value="getParam('debug.input')"
-                name="input"
-                outer-class="-mt-4 w-fit mx-auto"
-                input-class="$reset px-3 border-none bg-white text-sm h-fit w-fit"
-              />
+              <div>
+                <p class="float-right mr-2">
+                  <FormKit type="button" @click="copyInput" title="Copy to clipboard"
+                    ><component :is="copiedInput ? ClipboardCheckIcon : ClipboardCopyIcon" class="h-4 w-4"
+                  /></FormKit>
+                </p>
+                <FormKit
+                  type="select"
+                  :options="{'': 'JSON', csv: 'CSV'}"
+                  :value="getParam('debug.input')"
+                  name="input"
+                  outer-class="-mt-4 w-fit mx-auto"
+                  input-class="$reset px-3 border-none bg-white text-sm h-fit w-fit"
+                />
+              </div>
               <pre class="data" v-text="inputCSV" v-if="data.debug.input == 'csv'" />
               <pre class="data" v-text="input" v-else />
             </div>
             <div>
               <heading>Output</heading>
-              <FormKit
-                type="select"
-                :options="{'': 'JSON', csv: 'CSV', text: 'Text'}"
-                :value="getParam('debug.output')"
-                name="output"
-                outer-class="-mt-4 w-fit mx-auto"
-                input-class="$reset px-3 border-none bg-white text-sm h-fit w-fit"
-              />
+              <div>
+                <p class="float-right mr-2">
+                  <FormKit type="button" @click="copyOutput" title="Copy to clipboard"
+                    ><component :is="copiedOutput ? ClipboardCheckIcon : ClipboardCopyIcon" class="h-4 w-4"
+                  /></FormKit>
+                </p>
+                <FormKit
+                  type="select"
+                  :options="{'': 'JSON', csv: 'CSV', text: 'Text'}"
+                  :value="getParam('debug.output')"
+                  name="output"
+                  outer-class="-mt-4 w-fit mx-auto"
+                  input-class="$reset px-3 border-none bg-white text-sm h-fit w-fit"
+                />
+              </div>
               <pre class="data" v-text="outputRaw" v-if="data.debug.output == 'text'" />
               <pre class="data" v-text="outputCSV" v-else-if="data.debug.output == 'csv'" />
               <pre class="data" v-text="output" v-else />
