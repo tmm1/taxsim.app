@@ -1331,7 +1331,7 @@ async function copyOutput() {
                     arrow
                     hover
                     placement="left"
-                    @open:popper="copyInput"
+                    @open:popper="e => {if (e && e.type == 'click') copyInput() }"
                     :content="(copiedInput ? 'Copied' : 'Copy') + ' to clipboard'"
                   >
                     <FormKit type="button" @click="copyInput"
@@ -1358,7 +1358,7 @@ async function copyOutput() {
                     arrow
                     hover
                     placement="left"
-                    @open:popper="copyOutput"
+                    @open:popper="e => {if (e && e.type == 'click') copyOutput() }"
                     :content="(copiedOutput ? 'Copied' : 'Copy') + ' to clipboard'"
                   >
                     <FormKit type="button" @click="copyOutput"
