@@ -217,10 +217,10 @@ async function copyOutput() {
         <div>
           <p class="float-right pt-1">
             <popper class="menu" offset-distance="6" placement="bottom-end">
-              <CogIcon class="h-5 aspect-square text-gray-600 cursor-pointer" />
+              <CogIcon class="h-5 aspect-square text-gray-600 cursor-pointer hover:text-blue-500" />
               <template #content>
                 <p class="text-gray-600 font-semibold mx-auto text-sm mb-2">Settings</p>
-                <div class="ml-3">
+                <div class="mx-3">
                   <FormKit type="group" name="settings">
                     <FormKit
                       type="checkbox"
