@@ -1,4 +1,4 @@
-## https://taxsim.app
+## [taxsim.app](https://taxsim.app)
 
 an interactive US Individual Income Tax simulator
 
