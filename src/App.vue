@@ -293,7 +293,7 @@ const schemaDemographics = [
     options: {
       single: 'Single',
       married: 'Married',
-      marriedFilingSeparately: 'Married Filing Separately',
+      //marriedFilingSeparately: 'Married Filing Separately',
       headOfHousehold: 'Head of Household',
       dependent: 'Dependent Taxpayer',
     },
