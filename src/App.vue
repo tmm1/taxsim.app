@@ -216,8 +216,8 @@ async function copyOutput() {
       <main class="min-h-screen p-4 pt-2 mx-auto max-w-4xl">
         <div>
           <p class="float-right pt-1">
-            <popper class="menu" offset-distance="0" placement="bottom-end">
-              <CogIcon class="h-5 aspect-square text-gray-600" />
+            <popper class="menu" offset-distance="6" placement="bottom-end">
+              <CogIcon class="h-5 aspect-square text-gray-600 cursor-pointer" />
               <template #content>
                 <p class="text-gray-600 font-semibold mx-auto text-sm mb-2">Settings</p>
                 <div class="ml-3">
@@ -367,7 +367,7 @@ pre.data {
 }
 .input-amount {
   input[type='number'] {
-    @apply text-sm text-gray-500 border-b border-gray-300 rounded-none;
+    @apply text-sm text-gray-600 border-b border-gray-400 rounded-none pb-1;
   }
   input[type='range'] {
     @apply appearance-none h-2 p-0 bg-gray-300;
