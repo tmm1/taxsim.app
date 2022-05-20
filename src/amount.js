@@ -74,6 +74,7 @@ function addHandlers(node) {
     node.context.handlers.increment = e => {
       e.preventDefault()
       if (node.context.disabled) return
+      node.context.handlers.DOMInput(e)
       const value = parseInt(node.value) || 0
       const input = e.currentTarget.parentElement.querySelector('input')
       const step = parseInt(input.step) || 1
@@ -86,6 +87,7 @@ function addHandlers(node) {
     node.context.handlers.decrement = e => {
       e.preventDefault()
       if (node.context.disabled) return
+      node.context.handlers.DOMInput(e)
       const value = parseInt(node.value) || 0
       const input = e.currentTarget.parentElement.querySelector('input')
       const step = parseInt(input.step) || 1
