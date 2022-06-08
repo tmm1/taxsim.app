@@ -488,8 +488,26 @@ export const incomeVars = [
   },
 ]
 
-export const income = incomeVars
-  .map(item => ({
+export const incomeQBIVars = [
+  {
+    name: 'pbusinc',
+    label: 'Qualified Business Income',
+    if: '$get(year).value * 1 >= 2018',
+  },
+  {
+    name: 'scorp',
+    label: 'Active SSTB S-Corp Income',
+    if: '$get(year).value * 1 >= 2018',
+  },
+  {
+    name: 'pprofinc',
+    label: 'Other SSTB Income',
+    if: '$get(year).value * 1 >= 2018',
+  },
+]
+
+function incomeToInput(item) {
+  return {
     $formkit: 'amount',
     id: item.name,
     name: item.name,
@@ -501,7 +519,7 @@ export const income = incomeVars
       else: 'range',
     },
     outerClass: 'col-span-2',
-    if: `$addIncome || $visible.${item.name}`,
+    if: [item.if, `($addIncome || $visible.${item.name})`].filter(f => !!f).join('&&'),
     min: item.type == 'gainorloss' ? -MAX : 0,
     max: item.max || MAX,
     step: STEP,
@@ -535,7 +553,12 @@ export const income = incomeVars
         ],
       },
     },
-  }))
+  }
+}
+
+export const income = incomeVars
+  .concat(incomeQBIVars)
+  .map(item => incomeToInput(item))
   .concat([
     {
       $el: 'button',
