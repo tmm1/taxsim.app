@@ -493,16 +493,60 @@ export const incomeQBIVars = [
     name: 'pbusinc',
     label: 'Qualified Business Income',
     if: '$get(year).value * 1 >= 2018',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: [
+          'Qualified business income may be eligible for up to a ',
+          aHref('20% deduction', 'https://www.irs.gov/newsroom/qualified-business-income-deduction'),
+          ' since the ',
+          tooltip('TCJA', 'Tax Cuts and Jobs Act of 2017'),
+        ],
+      },
+    ],
   },
   {
     name: 'scorp',
     label: 'Active SSTB S-Corp Income',
     if: '$get(year).value * 1 >= 2018',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: [
+          tooltip('SSTB', 'Specified Service Trade or Business'),
+          ' may be eligible for up to a ',
+          aHref('20% deduction', 'https://www.irs.gov/newsroom/qualified-business-income-deduction'),
+          ' since the ',
+          tooltip('TCJA', 'Tax Cuts and Jobs Act of 2017'),
+        ],
+      },
+    ],
   },
   {
     name: 'pprofinc',
     label: 'Other SSTB Income',
     if: '$get(year).value * 1 >= 2018',
+    help: [
+      {
+        $el: 'div',
+        attrs: {
+          class: 'font-semibold mb-0.5',
+        },
+        children: [
+          tooltip('SSTB', 'Specified Service Trade or Business'),
+          ' may be eligible for up to a ',
+          aHref('20% deduction', 'https://www.irs.gov/newsroom/qualified-business-income-deduction'),
+          ' since the ',
+          tooltip('TCJA', 'Tax Cuts and Jobs Act of 2017'),
+        ],
+      },
+    ],
   },
 ]
 
