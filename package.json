@@ -12,7 +12,7 @@
     "postcss": "^8.4.13",
     "tailwindcss": "^3.0.24",
     "vite": "^2.9.8",
-    "wrangler": "^2.0.2"
+    "wrangler": "^2.0.8"
   },
   "scripts": {
     "dev": "make && vite --host",
