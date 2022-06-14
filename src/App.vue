@@ -213,13 +213,13 @@ async function copyOutput() {
 <template>
   <FormKit type="group" v-model="data" @input="recompute">
     <div class="flex flex-col md:flex-row">
-      <main class="min-h-screen p-4 pt-2 mx-auto max-w-4xl">
+      <main class="mx-auto min-h-screen max-w-4xl p-4 pt-2">
         <div>
           <p class="float-right pt-1">
             <popper class="menu" offset-distance="6" placement="bottom-end">
-              <CogIcon class="h-5 aspect-square text-gray-600 cursor-pointer hover:text-blue-500" />
+              <CogIcon class="aspect-square h-5 cursor-pointer text-gray-600 hover:text-blue-500" />
               <template #content>
-                <p class="text-gray-600 font-semibold mx-auto text-sm mb-2">Settings</p>
+                <p class="mx-auto mb-2 text-sm font-semibold text-gray-600">Settings</p>
                 <div class="mx-3">
                   <FormKit type="group" name="settings">
                     <FormKit
@@ -240,20 +240,20 @@ async function copyOutput() {
                 </div> </template
             ></popper>
           </p>
-          <p class="text-xl md:text-2xl text-gray-600 font-bold"><a href="/">taxsim.app</a></p>
-          <p class="text-sm md:text-md text-gray-500 pb-2 leading-tight -mt-[0.1em]">
+          <p class="text-xl font-bold text-gray-600 md:text-2xl"><a href="/">taxsim.app</a></p>
+          <p class="md:text-md -mt-[0.1em] pb-2 text-sm leading-tight text-gray-500">
             <span class="font-semibold">an interactive US Individual Income Tax simulator</span>
           </p>
-          <div class="grid grid-cols-2 gap-x-4 md:gap-x-12 md:grid-cols-4 pt-3 pb-1 md:px-12">
+          <div class="grid grid-cols-2 gap-x-4 pt-3 pb-1 md:grid-cols-4 md:gap-x-12 md:px-12">
             <FormKitSchema :schema="[federalYear, statePicker]" :data="schemaData" />
           </div>
           <div
-            class="border border-red-300 rounded-lg whitespace-pre-wrap text-rose-400 p-3 mb-6 md:mx-12"
+            class="mb-6 whitespace-pre-wrap rounded-lg border border-red-300 p-3 text-rose-400 md:mx-12"
             v-if="error"
           >
             {{ error }}
           </div>
-          <div class="grid grid-cols-2 gap-x-4 md:gap-x-12 md:grid-cols-4 pb-3 md:px-12" v-else>
+          <div class="grid grid-cols-2 gap-x-4 pb-3 md:grid-cols-4 md:gap-x-12 md:px-12" v-else>
             <FormKitSchema :schema="[federalOutput, stateOutput].flat()" :data="schemaData" />
           </div>
         </div>
@@ -261,7 +261,7 @@ async function copyOutput() {
           <heading class="col-start-0 col-span-2 md:col-span-4">Demographics</heading>
           <FormKitSchema :schema="schemaDemographics" :data="schemaData" />
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+        <div class="grid grid-cols-1 gap-x-4 md:grid-cols-2">
           <div>
             <heading class="col-start-0 col-span-2 md:col-span-4">Deductions &amp; Credits</heading>
             <FormKitSchema :schema="schemaCredits" :data="schemaData" />
@@ -271,7 +271,7 @@ async function copyOutput() {
             <FormKitSchema :schema="schemaIncome" :data="schemaData" />
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4" v-if="settings.debug">
+        <div class="grid grid-cols-1 gap-x-4 md:grid-cols-2" v-if="settings.debug">
           <FormKit type="group" name="debug">
             <div>
               <heading>Input</heading>
@@ -333,8 +333,8 @@ async function copyOutput() {
             </div>
           </FormKit>
         </div>
-        <div class="mt-3 mb-3 border-t border-gray-100 pt-8 footer">
-          <p class="text-center text-sm md:text-md text-gray-400 pb-2 leading-tight">
+        <div class="footer mt-3 mb-3 border-t border-gray-100 pt-8">
+          <p class="md:text-md pb-2 text-center text-sm leading-tight text-gray-400">
             taxsim.app is <a href="https://github.com/tmm1/taxsim.app">open-source</a> and free to use
             <br />
             tax scenarios are calculated locally in your browser, using a
@@ -354,16 +354,16 @@ main {
 .credit-out a,
 .formkit-outer[data-type='amount'] a,
 .footer a {
-  @apply decoration-slate-300 underline;
+  @apply underline decoration-slate-300;
 }
 pre.data {
-  @apply font-mono mx-10 my-4 whitespace-pre-line break-all text-xs text-gray-500;
+  @apply mx-10 my-4 whitespace-pre-line break-all font-mono text-xs text-gray-500;
 }
 .summary {
-  @apply border-t border-gray-100 pt-3 mt-2 px-2 grid grid-cols-2 gap-x-1 gap-y-1 text-xs text-gray-500 empty:hidden;
+  @apply mt-2 grid grid-cols-2 gap-x-1 gap-y-1 border-t border-gray-100 px-2 pt-3 text-xs text-gray-500 empty:hidden;
 }
 .formkit-inner select {
-  @apply appearance-none cursor-pointer;
+  @apply cursor-pointer appearance-none;
   background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEuNDEgNC42NyAyLjQ4IDMuMTggMy41NCA0LjY3IDEuNDEgNC42NyIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIzLjU0IDUuMzMgMi40OCA2LjgyIDEuNDEgNS4zMyAzLjU0IDUuMzMiLz48L3N2Zz4=)
     no-repeat 95% 50%;
 }
@@ -372,10 +372,10 @@ pre.data {
 }
 .input-amount {
   input[type='number'] {
-    @apply text-sm text-gray-600 border-b border-gray-400 rounded-none pb-1;
+    @apply rounded-none border-b border-gray-400 pb-1 text-sm text-gray-600;
   }
   input[type='range'] {
-    @apply appearance-none h-2 p-0 bg-gray-300;
+    @apply h-2 appearance-none bg-gray-300 p-0;
   }
 }
 .input-numeric,
