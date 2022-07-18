@@ -235,7 +235,6 @@ export const demographics = [
 export const incomeVars = [
   {
     name: 'pwages',
-    spouse: 'swages',
     label: 'Wages and Salaries',
     help: [
       {
@@ -273,6 +272,11 @@ export const incomeVars = [
         ],
       },
     ],
+  },
+  {
+    name: 'swages',
+    label: 'Spouse Wages and Salaries',
+    if: '$get(mstat).value == "married" || $get(mstat).value == "marriedFilingSeparately"',
   },
   {
     name: 'pensions',
