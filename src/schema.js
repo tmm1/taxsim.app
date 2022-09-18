@@ -705,7 +705,7 @@ export const creditsVars = [
             ['Deductible medical expenses'],
             'Motor Vehicle registration fees',
             'Charitable contributions',
-            'Casulty or Theft losses'
+            'Casualty or Theft losses'
           ),
         ],
       },
