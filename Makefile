@@ -9,4 +9,4 @@ public/taxsim.js: public
 public/taxsim.wasm: public
 	curl -o public/taxsim.wasm https://taxsim.nber.org/taxsim35/taxsim.wasm
 
-.PHONY: default
+.PHONY: default public/taxsim.js public/taxsim.wasm
