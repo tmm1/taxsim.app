@@ -948,7 +948,7 @@ export const federalYear = {
   inputClass: 'font-semibold',
   name: 'year',
   id: 'year',
-  value: getParam('year') || '2020',
+  value: getParam('year') || '2024',
   min: 1960,
   max: new Date().getFullYear() + 1,
   help: 'Federal tax calculations are available from 1960 onwards',
